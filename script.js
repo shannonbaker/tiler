@@ -92,10 +92,6 @@ blankImage.addEventListener('drop', (e) => {
     e.preventDefault();
     const imageUrl = e.dataTransfer.getData('text/plain');
 
-    // Clear existing content in the drop area
-    blankImage.innerHTML = '';
-
-    // Create a new tile
     const tile = document.createElement('div');
     tile.style.backgroundImage = imageUrl;
     tile.className = 'tile';
