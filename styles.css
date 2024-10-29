@@ -15,6 +15,10 @@ body {
 }
 
 .tile {
+    width: 72px;
+    /* Tile Width */
+    height: 108px;
+    /* Tile Height */
     background-size: auto;
     /* No scaling, display original size */
     border: 1px solid #ccc;

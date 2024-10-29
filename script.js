@@ -7,8 +7,10 @@ function createTiles() {
     const image = new Image();
     image.src = sourceImage.src;
     image.onload = () => {
-        const tileWidth = image.width / 16;  // Tile Width (1/16 of total width)
-        const tileHeight = image.height / 64; // Tile Height (1/64 of total height)
+        const tileWidth = Math.floor(image.width / 16);  // Tile Width (1/16 of total width)
+        const tileHeight = Math.floor(image.height / 64); // Tile Height (1/64 of total height)
+
+        // Create a canvas for drawing tiles
         const canvas = document.createElement('canvas');
         canvas.width = tileWidth;
         canvas.height = tileHeight;
@@ -22,14 +24,14 @@ function createTiles() {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 context.drawImage(
                     image,
-                    col * tileWidth,
-                    row * tileHeight,
-                    tileWidth,
-                    tileHeight,
-                    0,
-                    0,
-                    tileWidth,
-                    tileHeight
+                    col * tileWidth,       // Start position in source image
+                    row * tileHeight,      // Start position in source image
+                    tileWidth,             // Width of the tile
+                    tileHeight,            // Height of the tile
+                    0,                     // X position in canvas
+                    0,                     // Y position in canvas
+                    tileWidth,             // Width of the tile on the canvas
+                    tileHeight             // Height of the tile on the canvas
                 );
 
                 const tile = document.createElement('div');
@@ -60,8 +62,8 @@ blankImage.addEventListener('drop', (e) => {
     tile.className = 'tile';
     tile.style.position = 'absolute';
 
-    const tileWidth = sourceImage.naturalWidth / 16; // Tile Width
-    const tileHeight = sourceImage.naturalHeight / 64; // Tile Height
+    const tileWidth = Math.floor(sourceImage.naturalWidth / 16); // Tile Width
+    const tileHeight = Math.floor(sourceImage.naturalHeight / 64); // Tile Height
 
     // Calculate snapping positions
     const snappedX = Math.round((e.offsetX - (tileWidth / 2)) / tileWidth) * tileWidth; // Center tile on grid
