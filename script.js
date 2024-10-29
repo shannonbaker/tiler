@@ -9,8 +9,8 @@ function createTiles() {
     const image = new Image();
     image.src = sourceImage.src;
     image.onload = () => {
-        const tileWidth = Math.floor(image.width / 16);
-        const tileHeight = Math.floor(image.height / 64);
+        const tileWidth = 72; //Math.floor(image.width / 16);
+        const tileHeight = 108;  //Math.floor(image.height / 64);
 
         for (let row = 0; row < 64; row++) {
             for (let col = 0; col < 16; col++) {
