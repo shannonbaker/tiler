@@ -75,15 +75,7 @@ blankImage.addEventListener('drop', (e) => {
     const snappedX = Math.round((e.offsetX) / tileWidth) * tileWidth; // Snap to grid
     const snappedY = Math.round((e.offsetY) / tileHeight) * tileHeight; // Snap to grid
 
-    // Create a new tile element
-    const newTile = document.createElement('div');
-    newTile.style.backgroundImage = imageUrl;
-    newTile.className = 'tile';
-    newTile.style.position = 'absolute';
-    newTile.style.left = `${snappedX}px`;  // Position it based on snapping
-    newTile.style.top = `${snappedY}px`;    // Position it based on snapping
-
-    // Check for an existing tile at the snapped position
+    // Check if a tile exists at the snapped position
     const existingTiles = document.querySelectorAll('.tile');
     let tileReplaced = false;
 
@@ -105,6 +97,13 @@ blankImage.addEventListener('drop', (e) => {
 
     // If no existing tile was replaced, append the new tile
     if (!tileReplaced) {
+        const newTile = document.createElement('div');
+        newTile.style.backgroundImage = imageUrl;
+        newTile.className = 'tile';
+        newTile.style.position = 'absolute';
+        newTile.style.left = `${snappedX}px`;  // Position it based on snapping
+        newTile.style.top = `${snappedY}px`;    // Position it based on snapping
+
         blankImage.appendChild(newTile);
     }
 });
