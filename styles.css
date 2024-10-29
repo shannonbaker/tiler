@@ -7,11 +7,21 @@ body {
     position: relative;
 }
 
-#tile-area {
+#battery-group {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    /* Add some spacing */
+}
+
+#battery-tiles {
+    display: flex;
+    /* Use flexbox for horizontal layout */
     justify-content: center;
-    margin-top: 20px;
+    /* Center tiles */
+    flex-wrap: wrap;
+    /* Allow wrapping if necessary */
 }
 
 .tile {
@@ -22,12 +32,12 @@ body {
     background-size: 100%;
     /* Make sure the tile image fills the div */
     border: 1px solid #ccc;
-    margin: 1px;
+    margin: 5px;
     /* Adjust margin as necessary */
     cursor: grab;
 }
 
-.droppable {
+#blank-image {
     width: 1024px;
     /* Adjust as needed */
     height: 1024px;
@@ -38,7 +48,7 @@ body {
     display: inline-block;
 }
 
-.droppable h2 {
+#blank-image h2 {
     position: absolute;
     top: 50%;
     left: 50%;
