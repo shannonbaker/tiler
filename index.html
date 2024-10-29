@@ -4,23 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Tiling</title>
+    <title>Image Tiling Tool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <h1>Image Tiling Tool</h1>
-    <div id="image-selector">
-        <label for="images">Choose images to tile:</label>
-        <select id="images" multiple>
-            <option value="image1.jpg">Image 1</option>
-            <option value="image2.jpg">Image 2</option>
-            <option value="image3.jpg">Image 3</option>
-            <!-- Add more images as needed -->
-        </select>
+    <div id="image-container">
+        <img id="source-image" src="your-image.jpg" alt="Source Image" style="display:none;">
+        <div id="tile-area"></div>
     </div>
-    <button id="tile-button">Tile Images</button>
-    <div id="tiled-images"></div>
+    <div id="blank-image" class="droppable">
+        <h2>Drop Tiles Here</h2>
+    </div>
     <script src="script.js"></script>
 </body>
 
