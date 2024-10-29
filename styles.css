@@ -15,10 +15,10 @@ body {
 }
 
 .tile {
-    width: 31px;
-    /* New Tile Width */
-    height: 46px;
-    /* New Tile Height */
+    width: 64px;
+    /* Tile Width */
+    height: 64px;
+    /* Tile Height */
     background-size: 100%;
     /* Cover full tile area */
     border: 1px solid #ccc;
@@ -28,9 +28,9 @@ body {
 }
 
 .droppable {
-    width: 500px;
+    width: 1024px;
     /* Adjust as needed */
-    height: 500px;
+    height: 1024px;
     /* Adjust as needed */
     border: 2px dashed #ccc;
     margin-top: 20px;
