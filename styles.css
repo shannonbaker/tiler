@@ -30,8 +30,8 @@ body {
 }
 
 #blank-image {
-    width: 1024px;
-    height: 1024px;
+    width: 1152px;
+    height: 3456px;
     border: 2px dashed #ccc;
     margin-top: 20px;
     position: relative;
