@@ -73,23 +73,12 @@ blankImage.addEventListener('drop', (e) => {
     blankImage.appendChild(tile);
 });
 
-// Function to update the title with the current date and time
-function updateTitleWithDate() {
-    const titleElement = document.getElementById('title');
-    const currentDate = new Date();
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-    };
-    const formattedDate = currentDate.toLocaleString('en-US', options);
-    titleElement.textContent += ` - Last Updated: ${formattedDate}`;
+// Function to set the last commit date and time
+function setLastCommitDate() {
+    const lastUpdateElement = document.getElementById('last-update');
+    lastUpdateElement.textContent = 'October 29, 2024, 14:30:15'; // Update this with your last commit date and time
 }
 
-// Call the function to create tiles and update the title
+// Call the function to create tiles and set the last commit date
 createTiles();
-updateTitleWithDate();
+setLastCommitDate();
