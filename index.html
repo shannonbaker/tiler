@@ -10,8 +10,13 @@
 
 <body>
     <h1 id="title">Image Tiling Tool - Last Commit ID: <span id="last-commit-id"></span></h1>
+
+    <!-- Dropdown for image selection -->
+    <label for="image-select">Select Source Image:</label>
+    <select id="image-select"></select>
+
     <div id="image-container">
-        <img id="source-image" src="font_master.png" alt="Source Image" style="display:none;">
+        <img id="source-image" src="source_image/font_master.png" alt="Source Image" style="display:none;">
         <div id="tile-area"></div>
     </div>
     <div id="blank-image" class="droppable">

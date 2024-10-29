@@ -1,6 +1,30 @@
 const sourceImage = document.getElementById('source-image');
 const tileArea = document.getElementById('tile-area');
 const blankImage = document.getElementById('blank-image');
+const imageSelect = document.getElementById('image-select');
+
+// Function to load the selected image
+function loadSelectedImage() {
+    const selectedImage = imageSelect.value;
+    sourceImage.src = `source_image/${selectedImage}`; // Update the source image path
+    createTiles(); // Recreate tiles when the image is changed
+}
+
+// Function to populate the dropdown with images from images.json
+async function populateImageDropdown() {
+    try {
+        const response = await fetch('images.json'); // Fetch the images JSON file
+        const data = await response.json();
+        data.images.forEach(image => {
+            const option = document.createElement('option');
+            option.value = image;
+            option.textContent = image;
+            imageSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching images:', error);
+    }
+}
 
 // Load the image and split it into tiles
 function createTiles() {
@@ -83,6 +107,8 @@ async function setLastCommitId() {
 
     try {
         const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/commits/main`); // Adjust branch name if necessary
+        if (!response.ok) throw new Error('Network response was not ok');
+
         const data = await response.json();
         lastCommitIdElement.textContent = data.sha; // Set the commit ID
     } catch (error) {
@@ -90,6 +116,9 @@ async function setLastCommitId() {
         lastCommitIdElement.textContent = 'Error fetching commit ID';
     }
 }
+
+// Populate the dropdown on load
+populateImageDropdown();
 
 // Call the function to create tiles and set the last commit ID
 createTiles();
