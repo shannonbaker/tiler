@@ -2,7 +2,6 @@ const sourceImage = document.getElementById('source-image');
 const tileArea = document.getElementById('tile-area');
 const blankImage = document.getElementById('blank-image');
 const imageSelect = document.getElementById('image-select');
-const groupedTilesContainer = document.getElementById('grouped-tiles');
 const batteryTilesContainer = document.getElementById('battery-tiles');
 
 // Function to load the selected image
@@ -41,7 +40,6 @@ function createTiles() {
 
         // Clear previous tiles
         tileArea.innerHTML = '';
-        groupedTilesContainer.innerHTML = '';
         batteryTilesContainer.innerHTML = ''; // Clear battery tiles on new image load
 
         for (let row = 0; row < rows; row++) {
@@ -81,9 +79,10 @@ function createTiles() {
 
                 tileArea.appendChild(tile);
 
-                // Add to battery group if the tile index is in the range
+                // Check for the Battery group range
                 if (tileIndex >= 167 && tileIndex <= 175) {
-                    batteryTilesContainer.appendChild(tile.cloneNode(true)); // Clone the tile to add to the battery group
+                    const batteryTile = tile.cloneNode(true); // Clone the tile to add to the battery group
+                    batteryTilesContainer.appendChild(batteryTile);
                 }
             }
         }
