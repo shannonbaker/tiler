@@ -15,10 +15,10 @@ body {
 }
 
 .tile {
-    width: 100px;
-    /* Adjust as needed */
-    height: 100px;
-    /* Adjust as needed */
+    width: 72px;
+    /* Tile width */
+    height: 108px;
+    /* Tile height */
     background-size: 100%;
     /* Cover full tile area */
     border: 1px solid #ccc;

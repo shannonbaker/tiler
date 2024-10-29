@@ -7,8 +7,8 @@ function createTiles() {
     const image = new Image();
     image.src = sourceImage.src;
     image.onload = () => {
-        const tileWidth = 100;  // Adjust tile size
-        const tileHeight = 100;  // Adjust tile size
+        const tileWidth = 72;  // Tile width
+        const tileHeight = 108; // Tile height
         const canvas = document.createElement('canvas');
         canvas.width = tileWidth;
         canvas.height = tileHeight;
@@ -54,12 +54,19 @@ blankImage.addEventListener('dragover', (e) => {
 blankImage.addEventListener('drop', (e) => {
     e.preventDefault();
     const imageUrl = e.dataTransfer.getData('text/plain');
+
     const tile = document.createElement('div');
     tile.style.backgroundImage = imageUrl;
     tile.className = 'tile';
     tile.style.position = 'absolute';
-    tile.style.left = `${e.offsetX - 50}px`;  // Adjust for tile size
-    tile.style.top = `${e.offsetY - 50}px`;    // Adjust for tile size
+
+    // Calculate snapping positions
+    const snappedX = Math.round((e.offsetX - 36) / 72) * 72; // Center tile on 72px grid
+    const snappedY = Math.round((e.offsetY - 54) / 108) * 108; // Center tile on 108px grid
+
+    tile.style.left = `${snappedX}px`;  // Adjust for tile size
+    tile.style.top = `${snappedY}px`;    // Adjust for tile size
+
     blankImage.appendChild(tile);
 });
 
