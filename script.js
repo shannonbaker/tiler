@@ -75,12 +75,13 @@ blankImage.addEventListener('drop', (e) => {
     const snappedX = Math.round((e.offsetX - (tileWidth / 2)) / tileWidth) * tileWidth; // Center tile on grid
     const snappedY = Math.round((e.offsetY - (tileHeight / 2)) / tileHeight) * tileHeight; // Center tile on grid
 
-    // Check if a tile exists at the snapping position
+    // Check if a tile exists at the snapped position
     const existingTiles = document.querySelectorAll('.tile');
     let tileReplaced = false;
 
     existingTiles.forEach((tile) => {
         const tileRect = tile.getBoundingClientRect();
+
         // Check if the drop position overlaps with the existing tile
         if (
             snappedX >= tileRect.left &&
@@ -96,35 +97,16 @@ blankImage.addEventListener('drop', (e) => {
 
     // If no existing tile was replaced, create a new tile
     if (!tileReplaced) {
-        const tile = document.createElement('div');
-        tile.style.backgroundImage = imageUrl;
-        tile.className = 'tile';
-        tile.style.position = 'absolute';
-        tile.style.left = `${snappedX}px`;  // Adjust for tile size
-        tile.style.top = `${snappedY}px`;    // Adjust for tile size
+        const newTile = document.createElement('div');
+        newTile.style.backgroundImage = imageUrl;
+        newTile.className = 'tile';
+        newTile.style.position = 'absolute';
+        newTile.style.left = `${snappedX}px`;  // Adjust for tile size
+        newTile.style.top = `${snappedY}px`;    // Adjust for tile size
 
-        blankImage.appendChild(tile);
+        blankImage.appendChild(newTile);
     }
 });
 
-// Function to set the last commit ID using GitHub API
-async function setLastCommitId() {
-    const lastCommitIdElement = document.getElementById('last-commit-id');
-    const repoOwner = 'your-username'; // Replace with your GitHub username
-    const repoName = 'your-repo-name';  // Replace with your GitHub repository name
-
-    try {
-        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/commits/main`); // Adjust branch name if necessary
-        if (!response.ok) throw new Error('Network response was not ok');
-
-        const data = await response.json();
-        lastCommitIdElement.textContent = data.sha; // Set the commit ID
-    } catch (error) {
-        console.error('Error fetching commit ID:', error);
-        lastCommitIdElement.textContent = 'Error fetching commit ID';
-    }
-}
-
-// Call the function to create tiles and set the last commit ID
+// Call the function to create tiles
 createTiles();
-setLastCommitId();
