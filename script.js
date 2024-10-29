@@ -81,6 +81,7 @@ blankImage.addEventListener('drop', (e) => {
 
     existingTiles.forEach((tile) => {
         const tileRect = tile.getBoundingClientRect();
+        // Check if the drop position overlaps with the existing tile
         if (
             snappedX >= tileRect.left &&
             snappedX < tileRect.right &&
