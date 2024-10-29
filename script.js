@@ -92,11 +92,6 @@ blankImage.addEventListener('drop', (e) => {
     e.preventDefault();
     const imageUrl = e.dataTransfer.getData('text/plain');
 
-    const tile = document.createElement('div');
-    tile.style.backgroundImage = imageUrl;
-    tile.className = 'tile';
-    tile.style.position = 'absolute';
-
     const tileWidth = Math.floor(sourceImage.naturalWidth / 16); // Tile Width
     const tileHeight = Math.floor(sourceImage.naturalHeight / 64); // Tile Height
 
@@ -104,6 +99,18 @@ blankImage.addEventListener('drop', (e) => {
     const snappedX = Math.round((e.offsetX - (tileWidth / 2)) / tileWidth) * tileWidth; // Center tile on grid
     const snappedY = Math.round((e.offsetY - (tileHeight / 2)) / tileHeight) * tileHeight; // Center tile on grid
 
+    // Check if a tile exists at the snapping position
+    const existingTile = document.elementFromPoint(e.clientX, e.clientY);
+    if (existingTile && existingTile.classList.contains('tile')) {
+        // Remove the existing tile
+        existingTile.remove();
+    }
+
+    // Create a new tile
+    const tile = document.createElement('div');
+    tile.style.backgroundImage = imageUrl;
+    tile.className = 'tile';
+    tile.style.position = 'absolute';
     tile.style.left = `${snappedX}px`;  // Adjust for tile size
     tile.style.top = `${snappedY}px`;    // Adjust for tile size
 
