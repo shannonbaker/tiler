@@ -75,12 +75,22 @@ blankImage.addEventListener('drop', (e) => {
     blankImage.appendChild(tile);
 });
 
-// Function to set the last commit date and time
-function setLastCommitDate() {
-    const lastUpdateElement = document.getElementById('last-update');
-    lastUpdateElement.textContent = '1'; // Update this with your last commit date and time
+// Function to set the last commit ID using GitHub API
+async function setLastCommitId() {
+    const lastCommitIdElement = document.getElementById('last-commit-id');
+    const repoOwner = 'your-username'; // Replace with your GitHub username
+    const repoName = 'your-repo-name';  // Replace with your GitHub repository name
+
+    try {
+        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/commits/main`); // Adjust branch name if necessary
+        const data = await response.json();
+        lastCommitIdElement.textContent = data.sha; // Set the commit ID
+    } catch (error) {
+        console.error('Error fetching commit ID:', error);
+        lastCommitIdElement.textContent = 'Error fetching commit ID';
+    }
 }
 
-// Call the function to create tiles and set the last commit date
+// Call the function to create tiles and set the last commit ID
 createTiles();
-setLastCommitDate();
+setLastCommitId();
