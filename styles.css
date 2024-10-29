@@ -19,8 +19,8 @@ body {
     /* Tile Width */
     height: 108px;
     /* Tile Height */
-    background-size: auto;
-    /* No scaling, display original size */
+    background-size: 100%;
+    /* Make sure the tile image fills the div */
     border: 1px solid #ccc;
     margin: 1px;
     /* Adjust margin as necessary */
