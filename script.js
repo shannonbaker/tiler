@@ -1,10 +1,7 @@
 const sourceImage = document.getElementById('source-image');
-const tileArea = document.getElementById('tile-area');
 const blankImage = document.getElementById('blank-image');
 const imageSelect = document.getElementById('image-select');
 const batteryTilesContainer = document.getElementById('battery-tiles');
-const fullTileSet = document.getElementById('full-tile-set');
-const toggleButton = document.getElementById('toggle-button');
 
 // Function to load the selected image
 function loadSelectedImage() {
@@ -40,51 +37,47 @@ function createTiles() {
         const rows = Math.floor(image.height / tileHeight);
         const cols = Math.floor(image.width / tileWidth);
 
-        // Clear previous tiles
-        tileArea.innerHTML = '';
-        batteryTilesContainer.innerHTML = ''; // Clear battery tiles on new image load
+        // Clear previous battery tiles
+        batteryTilesContainer.innerHTML = '';
 
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
                 const tileIndex = row * cols + col + 1; // Tile numbering starts from 1
 
-                // Create tile
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                tile.style.width = `${tileWidth}px`;
-                tile.style.height = `${tileHeight}px`;
-
-                // Create canvas for drawing
-                const canvas = document.createElement('canvas');
-                canvas.width = tileWidth;
-                canvas.height = tileHeight;
-                const context = canvas.getContext('2d');
-
-                context.drawImage(
-                    image,
-                    col * tileWidth,       // Start position in source image
-                    row * tileHeight,      // Start position in source image
-                    tileWidth,             // Width of the tile
-                    tileHeight,            // Height of the tile
-                    0,                     // X position in canvas
-                    0,                     // Y position in canvas
-                    tileWidth,             // Width of the tile on the canvas
-                    tileHeight             // Height of the tile on the canvas
-                );
-
-                tile.style.backgroundImage = `url(${canvas.toDataURL()})`;
-                tile.setAttribute('draggable', true);
-
-                tile.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('text/plain', tile.style.backgroundImage);
-                });
-
-                tileArea.appendChild(tile);
-
-                // Check for the Battery group range
+                // Only create tiles for the Battery group range
                 if (tileIndex >= 167 && tileIndex <= 175) {
-                    const batteryTile = tile.cloneNode(true); // Clone the tile to add to the battery group
-                    batteryTilesContainer.appendChild(batteryTile);
+                    // Create tile
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    tile.style.width = `${tileWidth}px`;
+                    tile.style.height = `${tileHeight}px`;
+
+                    // Create canvas for drawing
+                    const canvas = document.createElement('canvas');
+                    canvas.width = tileWidth;
+                    canvas.height = tileHeight;
+                    const context = canvas.getContext('2d');
+
+                    context.drawImage(
+                        image,
+                        col * tileWidth,       // Start position in source image
+                        row * tileHeight,      // Start position in source image
+                        tileWidth,             // Width of the tile
+                        tileHeight,            // Height of the tile
+                        0,                     // X position in canvas
+                        0,                     // Y position in canvas
+                        tileWidth,             // Width of the tile on the canvas
+                        tileHeight             // Height of the tile on the canvas
+                    );
+
+                    tile.style.backgroundImage = `url(${canvas.toDataURL()})`;
+                    tile.setAttribute('draggable', true);
+
+                    tile.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', tile.style.backgroundImage);
+                    });
+
+                    batteryTilesContainer.appendChild(tile);
                 }
             }
         }
@@ -134,16 +127,6 @@ async function setLastCommitId() {
         lastCommitIdElement.textContent = 'Error fetching commit ID';
     }
 }
-
-// Function to toggle the visibility of the full tile set
-function toggleFullTileSet() {
-    const tileSetVisible = tileArea.style.display !== 'none';
-    tileArea.style.display = tileSetVisible ? 'none' : 'block';
-    toggleButton.textContent = tileSetVisible ? 'Show Full Tile Set' : 'Hide Full Tile Set';
-}
-
-// Event listener for the toggle button
-toggleButton.addEventListener('click', toggleFullTileSet);
 
 // Populate the dropdown on load
 populateImageDropdown();
