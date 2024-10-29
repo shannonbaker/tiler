@@ -2,6 +2,8 @@ const sourceImage = document.getElementById('source-image');
 const blankImage = document.getElementById('blank-image');
 const batteryTilesContainer = document.getElementById('battery-tiles');
 
+let highlightTile; // Variable for the highlight tile
+
 // Load the image and split it into tiles
 function createTiles() {
     const image = new Image();
@@ -105,6 +107,48 @@ blankImage.addEventListener('drop', (e) => {
         newTile.style.top = `${snappedY}px`;    // Position it based on snapping
 
         blankImage.appendChild(newTile);
+    }
+
+    // Remove the highlight tile after drop
+    if (highlightTile) {
+        blankImage.removeChild(highlightTile);
+        highlightTile = null; // Clear highlight tile reference
+    }
+});
+
+// Highlight the destination cell while dragging
+blankImage.addEventListener('dragenter', (e) => {
+    e.preventDefault(); // Allow drop
+});
+
+blankImage.addEventListener('dragover', (e) => {
+    e.preventDefault(); // Allow drop
+    const tileWidth = Math.floor(sourceImage.naturalWidth / 16); // Tile Width
+    const tileHeight = Math.floor(sourceImage.naturalHeight / 64); // Tile Height
+
+    // Calculate snapping positions
+    const snappedX = Math.round((e.offsetX) / tileWidth) * tileWidth; // Snap to grid
+    const snappedY = Math.round((e.offsetY) / tileHeight) * tileHeight; // Snap to grid
+
+    // Create or update highlight tile
+    if (!highlightTile) {
+        highlightTile = document.createElement('div');
+        highlightTile.className = 'tile';
+        highlightTile.style.border = '2px dashed blue'; // Highlight style
+        highlightTile.style.position = 'absolute';
+        blankImage.appendChild(highlightTile);
+    }
+
+    // Position the highlight tile
+    highlightTile.style.left = `${snappedX}px`;
+    highlightTile.style.top = `${snappedY}px`;
+});
+
+// Remove highlight when drag leaves
+blankImage.addEventListener('dragleave', () => {
+    if (highlightTile) {
+        blankImage.removeChild(highlightTile);
+        highlightTile = null; // Clear highlight tile reference
     }
 });
 
