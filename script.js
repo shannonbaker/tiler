@@ -7,8 +7,8 @@ function createTiles() {
     const image = new Image();
     image.src = sourceImage.src;
     image.onload = () => {
-        const tileWidth = 64;  // Tile Width
-        const tileHeight = 64; // Tile Height
+        const tileWidth = image.width / 16;  // Tile Width (1/16 of total width)
+        const tileHeight = image.height / 64; // Tile Height (1/64 of total height)
         const canvas = document.createElement('canvas');
         canvas.width = tileWidth;
         canvas.height = tileHeight;
@@ -60,9 +60,12 @@ blankImage.addEventListener('drop', (e) => {
     tile.className = 'tile';
     tile.style.position = 'absolute';
 
+    const tileWidth = sourceImage.naturalWidth / 16; // Tile Width
+    const tileHeight = sourceImage.naturalHeight / 64; // Tile Height
+
     // Calculate snapping positions
-    const snappedX = Math.round((e.offsetX - (64 / 2)) / 64) * 64; // Center tile on 64px grid
-    const snappedY = Math.round((e.offsetY - (64 / 2)) / 64) * 64; // Center tile on 64px grid
+    const snappedX = Math.round((e.offsetX - (tileWidth / 2)) / tileWidth) * tileWidth; // Center tile on grid
+    const snappedY = Math.round((e.offsetY - (tileHeight / 2)) / tileHeight) * tileHeight; // Center tile on grid
 
     tile.style.left = `${snappedX}px`;  // Adjust for tile size
     tile.style.top = `${snappedY}px`;    // Adjust for tile size
