@@ -100,12 +100,25 @@ blankImage.addEventListener('drop', (e) => {
     const snappedY = Math.round((e.offsetY - (tileHeight / 2)) / tileHeight) * tileHeight; // Center tile on grid
 
     // Check if a tile exists at the snapping position
-    const existingTile = document.elementFromPoint(e.clientX, e.clientY);
-    if (existingTile && existingTile.classList.contains('tile')) {
-        // Replace the existing tile
-        existingTile.style.backgroundImage = imageUrl;
-    } else {
-        // Create a new tile if there's no existing tile
+    const existingTiles = document.querySelectorAll('.tile');
+    let tileReplaced = false;
+
+    existingTiles.forEach((tile) => {
+        const tileRect = tile.getBoundingClientRect();
+        if (
+            snappedX >= tileRect.left &&
+            snappedX < tileRect.right &&
+            snappedY >= tileRect.top &&
+            snappedY < tileRect.bottom
+        ) {
+            // Replace the existing tile
+            tile.style.backgroundImage = imageUrl;
+            tileReplaced = true; // Mark that a tile was replaced
+        }
+    });
+
+    // If no existing tile was replaced, create a new tile
+    if (!tileReplaced) {
         const tile = document.createElement('div');
         tile.style.backgroundImage = imageUrl;
         tile.className = 'tile';
