@@ -78,7 +78,7 @@ blankImage.addEventListener('drop', (e) => {
 // Function to set the last commit date and time
 function setLastCommitDate() {
     const lastUpdateElement = document.getElementById('last-update');
-    lastUpdateElement.textContent = 'October 29, 2024, 14:30:15'; // Update this with your last commit date and time
+    lastUpdateElement.textContent = '1'; // Update this with your last commit date and time
 }
 
 // Call the function to create tiles and set the last commit date
