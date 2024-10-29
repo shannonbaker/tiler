@@ -72,10 +72,18 @@ blankImage.addEventListener('drop', (e) => {
     const tileHeight = Math.floor(sourceImage.naturalHeight / 64); // Tile Height
 
     // Calculate snapping positions
-    const snappedX = Math.round((e.offsetX - (tileWidth / 2)) / tileWidth) * tileWidth; // Center tile on grid
-    const snappedY = Math.round((e.offsetY - (tileHeight / 2)) / tileHeight) * tileHeight; // Center tile on grid
+    const snappedX = Math.round((e.offsetX) / tileWidth) * tileWidth; // Snap to grid
+    const snappedY = Math.round((e.offsetY) / tileHeight) * tileHeight; // Snap to grid
 
-    // Check if a tile exists at the snapped position
+    // Create a new tile element
+    const newTile = document.createElement('div');
+    newTile.style.backgroundImage = imageUrl;
+    newTile.className = 'tile';
+    newTile.style.position = 'absolute';
+    newTile.style.left = `${snappedX}px`;  // Position it based on snapping
+    newTile.style.top = `${snappedY}px`;    // Position it based on snapping
+
+    // Check for an existing tile at the snapped position
     const existingTiles = document.querySelectorAll('.tile');
     let tileReplaced = false;
 
@@ -89,21 +97,14 @@ blankImage.addEventListener('drop', (e) => {
             snappedY >= tileRect.top &&
             snappedY < tileRect.bottom
         ) {
-            // Replace the existing tile
+            // Replace the existing tile's background image
             tile.style.backgroundImage = imageUrl;
             tileReplaced = true; // Mark that a tile was replaced
         }
     });
 
-    // If no existing tile was replaced, create a new tile
+    // If no existing tile was replaced, append the new tile
     if (!tileReplaced) {
-        const newTile = document.createElement('div');
-        newTile.style.backgroundImage = imageUrl;
-        newTile.className = 'tile';
-        newTile.style.position = 'absolute';
-        newTile.style.left = `${snappedX}px`;  // Adjust for tile size
-        newTile.style.top = `${snappedY}px`;    // Adjust for tile size
-
         blankImage.appendChild(newTile);
     }
 });
