@@ -3,6 +3,8 @@ const tileArea = document.getElementById('tile-area');
 const blankImage = document.getElementById('blank-image');
 const imageSelect = document.getElementById('image-select');
 const batteryTilesContainer = document.getElementById('battery-tiles');
+const fullTileSet = document.getElementById('full-tile-set');
+const toggleButton = document.getElementById('toggle-button');
 
 // Function to load the selected image
 function loadSelectedImage() {
@@ -132,6 +134,16 @@ async function setLastCommitId() {
         lastCommitIdElement.textContent = 'Error fetching commit ID';
     }
 }
+
+// Function to toggle the visibility of the full tile set
+function toggleFullTileSet() {
+    const tileSetVisible = tileArea.style.display !== 'none';
+    tileArea.style.display = tileSetVisible ? 'none' : 'block';
+    toggleButton.textContent = tileSetVisible ? 'Show Full Tile Set' : 'Hide Full Tile Set';
+}
+
+// Event listener for the toggle button
+toggleButton.addEventListener('click', toggleFullTileSet);
 
 // Populate the dropdown on load
 populateImageDropdown();
