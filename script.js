@@ -7,8 +7,8 @@ function createTiles() {
     const image = new Image();
     image.src = sourceImage.src;
     image.onload = () => {
-        const tileWidth = 64;  // New Tile Width
-        const tileHeight = 64; // New Tile Height
+        const tileWidth = 64;  // Tile Width
+        const tileHeight = 64; // Tile Height
         const canvas = document.createElement('canvas');
         canvas.width = tileWidth;
         canvas.height = tileHeight;
@@ -70,5 +70,23 @@ blankImage.addEventListener('drop', (e) => {
     blankImage.appendChild(tile);
 });
 
-// Call the function to create tiles
+// Function to update the title with the current date and time
+function updateTitleWithDate() {
+    const titleElement = document.getElementById('title');
+    const currentDate = new Date();
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    };
+    const formattedDate = currentDate.toLocaleString('en-US', options);
+    titleElement.textContent += ` - Last Updated: ${formattedDate}`;
+}
+
+// Call the function to create tiles and update the title
 createTiles();
+updateTitleWithDate();
