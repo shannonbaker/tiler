@@ -2,6 +2,8 @@ const sourceImage = document.getElementById('source-image');
 const tileArea = document.getElementById('tile-area');
 const blankImage = document.getElementById('blank-image');
 const imageSelect = document.getElementById('image-select');
+const groupedTilesContainer = document.getElementById('grouped-tiles');
+const batteryTilesContainer = document.getElementById('battery-tiles');
 
 // Function to load the selected image
 function loadSelectedImage() {
@@ -34,18 +36,30 @@ function createTiles() {
         const tileWidth = Math.floor(image.width / 16);  // Tile Width (1/16 of total width)
         const tileHeight = Math.floor(image.height / 64); // Tile Height (1/64 of total height)
 
-        // Create a canvas for drawing tiles
-        const canvas = document.createElement('canvas');
-        canvas.width = tileWidth;
-        canvas.height = tileHeight;
-        const context = canvas.getContext('2d');
-
         const rows = Math.floor(image.height / tileHeight);
         const cols = Math.floor(image.width / tileWidth);
 
+        // Clear previous tiles
+        tileArea.innerHTML = '';
+        groupedTilesContainer.innerHTML = '';
+        batteryTilesContainer.innerHTML = ''; // Clear battery tiles on new image load
+
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                const tileIndex = row * cols + col + 1; // Tile numbering starts from 1
+
+                // Create tile
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.style.width = `${tileWidth}px`;
+                tile.style.height = `${tileHeight}px`;
+
+                // Create canvas for drawing
+                const canvas = document.createElement('canvas');
+                canvas.width = tileWidth;
+                canvas.height = tileHeight;
+                const context = canvas.getContext('2d');
+
                 context.drawImage(
                     image,
                     col * tileWidth,       // Start position in source image
@@ -58,8 +72,6 @@ function createTiles() {
                     tileHeight             // Height of the tile on the canvas
                 );
 
-                const tile = document.createElement('div');
-                tile.className = 'tile';
                 tile.style.backgroundImage = `url(${canvas.toDataURL()})`;
                 tile.setAttribute('draggable', true);
 
@@ -68,6 +80,11 @@ function createTiles() {
                 });
 
                 tileArea.appendChild(tile);
+
+                // Add to battery group if the tile index is in the range
+                if (tileIndex >= 167 && tileIndex <= 175) {
+                    batteryTilesContainer.appendChild(tile.cloneNode(true)); // Clone the tile to add to the battery group
+                }
             }
         }
     };
