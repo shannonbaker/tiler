@@ -1,47 +1,41 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-}
-
-#image-container {
-    position: relative;
-}
-
-#battery-group {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px 0;
 }
 
-#battery-tiles {
+.glyph-selection {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-.tile {
-    width: 72px;
-    height: 108px;
-    background-size: 100%;
-    border: 1px solid #ccc;
-    margin: 0px;
+.glyph {
+    font-size: 48px;
     cursor: grab;
 }
 
-#blank-image {
+.canvas {
     width: 1152px;
+    /* 16 columns * 72px */
     height: 3456px;
-    border: 2px dashed #ccc;
-    margin-top: 20px;
+    /* 32 rows * 108px */
+    display: grid;
+    grid-template-columns: repeat(16, 72px);
+    grid-template-rows: repeat(32, 108px);
+    gap: 0;
+    border: 1px solid #ccc;
     position: relative;
-    display: inline-block;
 }
 
-#blank-image h2 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #aaa;
+canvas-tile {
+    width: 72px;
+    height: 108px;
+    border: 1px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #333;
 }
