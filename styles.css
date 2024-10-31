@@ -11,7 +11,9 @@ body {
     margin-bottom: 20px;
 }
 
+/* Apply Bruno Ace SC font to all glyphs */
 .glyph {
+    font-family: 'Bruno Ace SC', sans-serif;
     font-size: 48px;
     cursor: grab;
 }
