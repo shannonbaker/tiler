@@ -11,15 +11,15 @@ body {
     margin-bottom: 20px;
 }
 
-/* Material Symbols Outlined font for symbols */
-.glyph.material-symbols-outlined {
+/* Material Symbols Outlined font for icon glyphs */
+.glyph.icon-glyph {
     font-family: 'Material Symbols Outlined', sans-serif;
     font-size: 48px;
     cursor: grab;
 }
 
-/* Bruno Ace SC font for "KM" */
-.glyph.glyph-km {
+/* Bruno Ace SC font for text glyphs */
+.glyph.text-glyph {
     font-family: 'Bruno Ace SC', sans-serif;
     font-size: 48px;
     cursor: grab;

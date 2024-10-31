@@ -19,8 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.addEventListener("drop", drop);
 
     function dragStart(event) {
+        // Identify the font based on the class of the dragged item
+        const isIconGlyph = event.target.classList.contains("icon-glyph");
         event.dataTransfer.setData("text/plain", event.target.textContent);
-        event.dataTransfer.setData("font-family", event.target.classList.contains("glyph-km") ? "Bruno Ace SC" : "Material Symbols Outlined");
+        event.dataTransfer.setData("font-family", isIconGlyph ? "Material Symbols Outlined" : "Bruno Ace SC");
     }
 
     function dragOver(event) {
@@ -37,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
 
-            // Add class for Material Symbols only if it's not "KM"
+            // Toggle the material-symbols-outlined class for icons
             if (fontFamily === "Material Symbols Outlined") {
                 targetTile.classList.add("material-symbols-outlined");
             } else {
