@@ -18,6 +18,13 @@ body {
     cursor: grab;
 }
 
+/* Specifically target the KM tile */
+.glyph-km {
+    font-family: 'Bruno Ace SC', sans-serif;
+    font-size: 48px;
+    cursor: grab;
+}
+
 .canvas {
     width: 1152px;
     /* 16 columns * 72px */
