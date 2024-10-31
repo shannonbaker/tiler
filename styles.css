@@ -12,13 +12,7 @@ body {
 }
 
 /* Apply Bruno Ace SC font to all glyphs */
-.glyph {
-    font-family: 'Bruno Ace SC', sans-serif;
-    font-size: 48px;
-    cursor: grab;
-}
-
-/* Specifically target the KM tile */
+.glyph,
 .glyph-km {
     font-family: 'Bruno Ace SC', sans-serif;
     font-size: 48px;
@@ -49,4 +43,6 @@ body {
     justify-content: center;
     font-size: 48px;
     color: #333;
+    font-family: 'Bruno Ace SC', sans-serif;
+    /* Apply Bruno Ace SC font to canvas tiles */
 }
