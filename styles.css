@@ -31,7 +31,7 @@ body {
     /* Light grey background */
 }
 
-canvas-tile {
+.canvas-tile {
     width: 72px;
     height: 108px;
     border: 1px dashed #ddd;
