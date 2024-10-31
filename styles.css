@@ -27,6 +27,8 @@ body {
     gap: 0;
     border: 1px solid #ccc;
     position: relative;
+    background-color: #f0f0f0;
+    /* Light grey background */
 }
 
 canvas-tile {
