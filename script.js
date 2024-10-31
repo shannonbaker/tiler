@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function dragStart(event) {
         event.dataTransfer.setData("text/plain", event.target.textContent);
+        event.dataTransfer.setData("font-family", event.target.classList.contains("glyph-km") ? "Bruno Ace SC" : "Material Symbols Outlined");
     }
 
     function dragOver(event) {
@@ -29,17 +30,18 @@ document.addEventListener("DOMContentLoaded", () => {
     function drop(event) {
         event.preventDefault();
         const symbol = event.dataTransfer.getData("text/plain");
+        const fontFamily = event.dataTransfer.getData("font-family");
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
             targetTile.textContent = symbol;
+            targetTile.style.fontFamily = fontFamily;
 
-            // Check if the dropped text is "KM" and apply Bruno Ace SC, otherwise use Material Symbols
-            if (symbol === "KM") {
-                targetTile.style.fontFamily = "'Bruno Ace SC', sans-serif";
-            } else {
+            // Add class for Material Symbols only if it's not "KM"
+            if (fontFamily === "Material Symbols Outlined") {
                 targetTile.classList.add("material-symbols-outlined");
-                targetTile.style.fontFamily = "'Material Symbols Outlined', sans-serif";
+            } else {
+                targetTile.classList.remove("material-symbols-outlined");
             }
         }
     }
