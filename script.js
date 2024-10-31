@@ -34,6 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (targetTile.classList.contains("canvas-tile")) {
             targetTile.textContent = symbol;
             targetTile.classList.add("material-symbols-outlined");
+
+            // Apply Bruno Ace SC font to the tile explicitly
+            targetTile.style.fontFamily = "'Bruno Ace SC', sans-serif";
         }
     }
 });
