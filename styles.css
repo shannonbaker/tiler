@@ -11,9 +11,15 @@ body {
     margin-bottom: 20px;
 }
 
-/* Apply Bruno Ace SC font to all glyphs */
-.glyph,
-.glyph-km {
+/* Material Symbols Outlined font for symbols */
+.glyph.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-size: 48px;
+    cursor: grab;
+}
+
+/* Bruno Ace SC font for "KM" */
+.glyph.glyph-km {
     font-family: 'Bruno Ace SC', sans-serif;
     font-size: 48px;
     cursor: grab;
@@ -43,6 +49,4 @@ body {
     justify-content: center;
     font-size: 48px;
     color: #333;
-    font-family: 'Bruno Ace SC', sans-serif;
-    /* Apply Bruno Ace SC font to canvas tiles */
 }

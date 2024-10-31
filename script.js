@@ -33,10 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (targetTile.classList.contains("canvas-tile")) {
             targetTile.textContent = symbol;
-            targetTile.classList.add("material-symbols-outlined");
 
-            // Apply Bruno Ace SC font to the tile explicitly
-            targetTile.style.fontFamily = "'Bruno Ace SC', sans-serif";
+            // Check if the dropped text is "KM" and apply Bruno Ace SC, otherwise use Material Symbols
+            if (symbol === "KM") {
+                targetTile.style.fontFamily = "'Bruno Ace SC', sans-serif";
+            } else {
+                targetTile.classList.add("material-symbols-outlined");
+                targetTile.style.fontFamily = "'Material Symbols Outlined', sans-serif";
+            }
         }
     }
 });
