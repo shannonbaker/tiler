@@ -17,6 +17,10 @@
     },
     {
         "type": "text",
-        "content": "MILES"
+        "content": "MI"
+    },
+    {
+        "type": "text",
+        "content": "Volt"
     }
 ]
