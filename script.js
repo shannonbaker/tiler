@@ -30,6 +30,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const fontSize = glyph.size || 48;
             glyphElement.style.fontSize = `${fontSize}px`;
 
+            // Set data attributes for span information
+            glyphElement.dataset.spanWidth = glyph.spanWidth || 1;
+
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
         });
@@ -61,7 +64,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const fontSize = event.target.style.fontSize || "48px";
         event.dataTransfer.setData("font-size", fontSize);
 
-        console.log("Drag started:", event.target.textContent, "Size:", fontSize); // Log drag start with size
+        // Include span width in data transfer
+        const spanWidth = event.target.dataset.spanWidth || 1;
+        event.dataTransfer.setData("span-width", spanWidth);
+
+        console.log("Drag started:", event.target.textContent, "Size:", fontSize, "Span Width:", spanWidth); // Log drag start with size and span width
     }
 
     function dragOver(event) {
@@ -73,20 +80,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         const symbol = event.dataTransfer.getData("text/plain");
         const fontFamily = event.dataTransfer.getData("font-family");
         const fontSize = event.dataTransfer.getData("font-size");
+        const spanWidth = parseInt(event.dataTransfer.getData("span-width"), 10);
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
+            // Apply the glyph to the starting tile
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = fontSize;
+            targetTile.classList.add("material-symbols-outlined");
+            targetTile.style.color = "white";
+            targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
 
-            if (fontFamily === "Material Symbols Outlined") {
-                targetTile.classList.add("material-symbols-outlined");
-            } else {
-                targetTile.classList.remove("material-symbols-outlined");
+            // Adjust tiles based on span width
+            const tileIndex = Array.from(canvas.children).indexOf(targetTile);
+
+            for (let col = 1; col < spanWidth; col++) {
+                const nextTile = canvas.children[tileIndex + col];
+                if (nextTile) {
+                    nextTile.textContent = ""; // Clear content of spanned tile
+                    nextTile.style.backgroundColor = "rgba(255, 255, 255, 0.1)"; // Set transparent background
+                }
             }
 
-            console.log("Dropped:", symbol, "Size:", fontSize); // Log drop event with size
+            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth); // Log drop with span width
         }
     }
 });

@@ -6,22 +6,21 @@
     },
     {
         "type": "icon",
-        "content": "star",
-        "size": 64
+        "content": "star"
     },
     {
         "type": "icon",
         "content": "favorite",
-        "size": 64
+        "size": 32
     },
     {
         "type": "text",
-        "content": "KM",
-        "size": 36
+        "content": "KM"
     },
     {
         "type": "text",
-        "content": "HDOP",
-        "size": 36
+        "content": "MILES",
+        "size": 56,
+        "spanWidth": 2
     }
 ]
