@@ -63,12 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function loadFontsAndRenderGlyphs(glyphs) {
         document.fonts.ready.then(() => {
             renderGlyphs(glyphs);
-            setTimeout(adjustClippingAfterLoad, 0);
         });
     }
 
     function renderGlyphs(glyphs) {
-        glyphs.forEach((glyph, index) => {
+        glyphs.forEach((glyph) => {
             const glyphElement = document.createElement("div");
             glyphElement.textContent = glyph.content;
             glyphElement.draggable = true;
@@ -82,6 +81,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const fontSize = glyph.size || 48;
             glyphElement.style.fontSize = `${fontSize}px`;
+
+            // Apply mirroring transformation in the selection area if `mirror: true`
+            if (glyph.mirror) {
+                glyphElement.style.transform = "scaleX(-1)"; // Flip horizontally
+            }
+
+            glyphElement.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
 
             glyphElement.dataset.spanWidth = glyph.spanWidth || 1;
             glyphElement.dataset.offsetX = glyph.offset?.x || 0;
@@ -105,6 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
+            // Apply mirroring transformation if the glyph has `mirror: true`
+            if (glyph.mirror) {
+                targetTile.style.transform = "scaleX(-1)"; // Flip horizontally
+            }
+
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
@@ -112,18 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.left = `${glyph.offset?.x || 0}px`;
             targetTile.style.top = `${glyph.offset?.y || 0}px`;
             targetTile.style.color = "white";
-
-            // Apply mirroring transformation if the glyph has `mirror: true`
-            if (glyph.mirror) {
-                targetTile.style.transform = "scaleX(-1)"; // Flip horizontally
-            } else {
-                targetTile.style.transform = "none"; // No flip
-            }
         }
-    }
-
-    function adjustClippingAfterLoad() {
-        // No clipping color adjustments needed
     }
 
     function dragStart(event) {
@@ -170,6 +170,13 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.left = `${offsetX}px`;
             targetTile.style.top = `${offsetY}px`;
             targetTile.style.color = "white";
+
+            // Apply mirroring if `mirror` attribute is true in drag-and-drop
+            if (event.dataTransfer.getData("mirror") === "true") {
+                targetTile.style.transform = "scaleX(-1)";
+            } else {
+                targetTile.style.transform = "none";
+            }
         }
     }
 });
