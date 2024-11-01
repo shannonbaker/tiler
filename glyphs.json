@@ -1,0 +1,26 @@
+[
+    {
+        "type": "icon",
+        "content": "home"
+    },
+    {
+        "type": "icon",
+        "content": "star"
+    },
+    {
+        "type": "icon",
+        "content": "favorite"
+    },
+    {
+        "type": "text",
+        "content": "KM"
+    },
+    {
+        "type": "text",
+        "content": "VOLT"
+    },
+    {
+        "type": "text",
+        "content": "amp"
+    }
+]

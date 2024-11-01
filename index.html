@@ -5,23 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glyph Placement Tool</title>
-    <!-- Link Bruno Ace SC and Material Symbols Outlined fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="glyph-selection">
-        <div class="glyph icon-glyph material-symbols-outlined" draggable="true">home</div>
-        <div class="glyph icon-glyph material-symbols-outlined" draggable="true">star</div>
-        <div class="glyph icon-glyph material-symbols-outlined" draggable="true">favorite</div>
-        <div class="glyph text-glyph" draggable="true">KM</div> <!-- "KM" text glyph -->
-        <div class="glyph text-glyph" draggable="true">AMP</div> <!-- "KM" text glyph -->
-    </div>
-
+    <div class="glyph-selection" id="glyph-selection"></div> <!-- Dynamic glyph container -->
     <div class="canvas" id="canvas"></div>
-
     <script src="script.js"></script>
 </body>
 
