@@ -1,4 +1,10 @@
 function exportCanvasAsPNG() {
+    // Remove borders temporarily
+    const tiles = document.querySelectorAll(".canvas-tile");
+    tiles.forEach(tile => {
+        tile.style.border = "none";
+    });
+
     html2canvas(document.getElementById("canvas"), { backgroundColor: null }).then(canvasElement => {
         canvasElement.toBlob(blob => {
             if (blob) {
@@ -16,8 +22,14 @@ function exportCanvasAsPNG() {
         }, "image/png");
     }).catch(error => {
         console.error("An error occurred during PNG export:", error);
+    }).finally(() => {
+        // Restore borders after saving
+        tiles.forEach(tile => {
+            tile.style.border = "1px dashed #ddd";
+        });
     });
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
