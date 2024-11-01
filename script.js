@@ -3,9 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const glyphSelection = document.getElementById("glyph-selection");
     const jsonUpload = document.getElementById("jsonUpload");
 
+    // Event listener for file upload
     jsonUpload.addEventListener("change", handleFileUpload);
 
-    // Handle file upload
+    // Function to handle file upload
     function handleFileUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -15,10 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const glyphs = JSON.parse(e.target.result);
                 console.log("Uploaded glyphs data:", glyphs);
-                renderGlyphs(glyphs);
+                renderGlyphs(glyphs); // Render new glyphs
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
-                alert("Invalid JSON file.");
+                alert("Invalid JSON file. Please check the structure and try again.");
             }
         };
         reader.readAsText(file);
@@ -26,7 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Render glyphs from JSON data
     function renderGlyphs(glyphs) {
-        glyphSelection.innerHTML = ""; // Clear existing glyphs
+        // Clear any existing glyphs in the selection area
+        glyphSelection.innerHTML = "";
 
         glyphs.forEach(glyph => {
             const glyphElement = document.createElement("div");
@@ -51,14 +53,23 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.dataset.offsetY = glyph.offset?.y || 0;
 
             glyphElement.addEventListener("dragstart", dragStart);
-            glyphSelection.appendChild(glyphElement);
+            glyphSelection.appendChild(glyphElement); // Add glyph to selection area
         });
+        console.log("Glyphs rendered from uploaded JSON."); // Confirm rendering
     }
 
-    // Drag-and-drop handlers remain the same
+    // Create grid tiles on canvas
+    for (let i = 0; i < 16 * 32; i++) {
+        const tile = document.createElement("div");
+        tile.classList.add("canvas-tile");
+        canvas.appendChild(tile);
+    }
+
+    // Canvas event listeners for drag-and-drop
     canvas.addEventListener("dragover", dragOver);
     canvas.addEventListener("drop", drop);
 
+    // Drag-and-drop handlers remain the same
     function dragStart(event) {
         const isIconGlyph = event.target.classList.contains("icon-glyph");
         event.dataTransfer.setData("text/plain", event.target.textContent);
