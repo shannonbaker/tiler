@@ -1,23 +1,11 @@
 function exportCanvasAsPNG() {
-    // Remove borders temporarily
-    const tiles = document.querySelectorAll(".canvas-tile");
-    const canvasElement = document.getElementById("canvas");
-
-    // Store the original border style
-    const originalCanvasBorder = canvasElement.style.border;
-    canvasElement.style.border = "none"; // Remove canvas border
-
-    tiles.forEach(tile => {
-        tile.style.border = "none"; // Remove each tile border
-    });
-
-    html2canvas(canvasElement, { backgroundColor: null }).then(capturedCanvas => {
-        capturedCanvas.toBlob(blob => {
+    html2canvas(document.getElementById("canvas"), { backgroundColor: null }).then(canvasElement => {
+        canvasElement.toBlob(blob => {
             if (blob) {
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = "canvas.png";
-                document.body.appendChild(link); // Append for Firefox compatibility
+                document.body.appendChild(link); // Needed for Firefox compatibility
                 link.click();
                 document.body.removeChild(link); // Clean up
                 URL.revokeObjectURL(link.href);
@@ -28,16 +16,8 @@ function exportCanvasAsPNG() {
         }, "image/png");
     }).catch(error => {
         console.error("An error occurred during PNG export:", error);
-    }).finally(() => {
-        // Restore the original border styles after saving
-        canvasElement.style.border = originalCanvasBorder;
-        tiles.forEach(tile => {
-            tile.style.border = "1px dashed #ddd";
-        });
     });
 }
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
@@ -83,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function renderGlyphs(glyphs) {
-        glyphs.forEach(glyph => {
+        glyphs.forEach((glyph, index) => {
             const glyphElement = document.createElement("div");
             glyphElement.textContent = glyph.content;
             glyphElement.draggable = true;
@@ -105,11 +85,15 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
 
+            // Place the glyph on the canvas
             if (glyph.column !== undefined && glyph.row !== undefined) {
                 const tileIndex = (glyph.row - 1) * 16 + (glyph.column - 1);
                 placeGlyphOnCanvas(glyph, tileIndex);
             }
         });
+
+        // Call adjustClippingAfterLoad after all glyphs are placed
+        setTimeout(adjustClippingAfterLoad, 0); // Delay to ensure render completion
     }
 
     function placeGlyphOnCanvas(glyph, tileIndex) {
@@ -120,28 +104,30 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
-            // Apply text shadow and other styling
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
             targetTile.style.position = "relative";
             targetTile.style.left = `${glyph.offset?.x || 0}px`;
             targetTile.style.top = `${glyph.offset?.y || 0}px`;
-            targetTile.style.color = "white"; // Default to white color
-
-            // Delay the clipping calculation to ensure accurate dimensions after rendering
-            setTimeout(() => {
-                const contentWidth = targetTile.scrollWidth;
-                const availableWidth = 72 * (glyph.spanWidth || 1) - Math.abs(glyph.offset?.x || 0);
-                const isClipped = contentWidth > availableWidth;
-
-                // Set the color based on whether clipping occurs
-                targetTile.style.color = isClipped ? "red" : "white";
-            }, 0); // Delay of 0ms to let rendering complete
+            targetTile.style.color = "white"; // Default color before clipping check
         }
     }
 
+    function adjustClippingAfterLoad() {
+        const tiles = document.querySelectorAll(".canvas-tile");
 
+        tiles.forEach(tile => {
+            const contentWidth = tile.scrollWidth;
+            const availableWidth = tile.offsetWidth - Math.abs(parseInt(tile.style.left || 0));
+
+            // Determine if clipping is occurring
+            const isClipped = contentWidth > availableWidth;
+
+            // Apply color based on clipping
+            tile.style.color = isClipped ? "red" : "white";
+        });
+    }
 
     function dragStart(event) {
         const isIconGlyph = event.target.classList.contains("icon-glyph");
@@ -169,9 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const symbol = event.dataTransfer.getData("text/plain");
         const fontFamily = event.dataTransfer.getData("font-family");
         const fontSize = parseInt(event.dataTransfer.getData("font-size"), 10);
-        const spanWidth = parseInt(event.dataTransfer.getData("spanWidth"), 10);
-        const offsetX = parseInt(event.dataTransfer.getData("offsetX"), 10);
-        const offsetY = parseInt(event.dataTransfer.getData("offsetY"), 10);
+        const spanWidth = parseInt(event.dataTransfer.getData("span-width"), 10);
+        const offsetX = parseInt(event.dataTransfer.getData("offset-x"), 10);
+        const offsetY = parseInt(event.dataTransfer.getData("offset-y"), 10);
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
