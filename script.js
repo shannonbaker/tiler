@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.addEventListener("drop", drop);
 
     function dragStart(event) {
+        // Identify the font based on the class of the dragged item
         const isIconGlyph = event.target.classList.contains("icon-glyph");
         event.dataTransfer.setData("text/plain", event.target.textContent);
         event.dataTransfer.setData("font-family", isIconGlyph ? "Material Symbols Outlined" : "Bruno Ace SC");
