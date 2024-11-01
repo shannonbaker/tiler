@@ -6,16 +6,18 @@
     },
     {
         "type": "icon",
-        "content": "star"
+        "content": "star",
+        "size": 64
     },
     {
         "type": "icon",
-        "content": "favorite"
+        "content": "favorite",
+        "size": 64
     },
     {
         "type": "text",
         "content": "KM",
-        "size": 52
+        "size": 36
     },
     {
         "type": "text",
