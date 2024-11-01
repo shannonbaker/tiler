@@ -100,17 +100,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
+            // Apply the glyph to the starting tile
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
             targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
-            targetTile.style.width = `${72 * spanWidth}px`;
+            targetTile.style.width = `${72 * spanWidth}px`; // Set the width to span multiple tiles if needed
             targetTile.style.overflow = "hidden";
 
+            // Position adjustment using offset
             targetTile.style.position = "relative";
             targetTile.style.left = `${offsetX}px`;
             targetTile.style.top = `${offsetY}px`;
+
+            // Temporarily set color to white for measurement
+            targetTile.style.color = "white";
+
+            // Measure the actual rendered width of the content
+            const contentWidth = targetTile.scrollWidth;
+
+            // Check if the rendered width exceeds the available width for the span
+            const availableWidth = 72 * spanWidth;
+            const isClipped = contentWidth > availableWidth;
+
+            // Set color to red if clipped, otherwise keep it white
+            targetTile.style.color = isClipped ? "red" : "white";
+
+            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Clipped:", isClipped); // Log drop with span width and clipping status
         }
     }
+
 });
