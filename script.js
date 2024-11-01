@@ -1,18 +1,33 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
     const glyphSelection = document.getElementById("glyph-selection");
+    const jsonUpload = document.getElementById("jsonUpload");
 
-    try {
-        // Fetch glyph data from JSON file
-        const response = await fetch("glyphs.json");
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+    jsonUpload.addEventListener("change", handleFileUpload);
 
-        const glyphs = await response.json();
-        console.log("Glyphs data loaded:", glyphs); // Log JSON data
+    // Handle file upload
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
 
-        // Render glyphs in selection area
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const glyphs = JSON.parse(e.target.result);
+                console.log("Uploaded glyphs data:", glyphs);
+                renderGlyphs(glyphs);
+            } catch (error) {
+                console.error("Error parsing JSON file:", error);
+                alert("Invalid JSON file.");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // Render glyphs from JSON data
+    function renderGlyphs(glyphs) {
+        glyphSelection.innerHTML = ""; // Clear existing glyphs
+
         glyphs.forEach(glyph => {
             const glyphElement = document.createElement("div");
             glyphElement.textContent = glyph.content;
@@ -38,45 +53,27 @@ document.addEventListener("DOMContentLoaded", async () => {
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
         });
-
-        console.log("Glyph elements added to selection area."); // Confirm appending
-
-    } catch (error) {
-        console.error("Error loading glyphs:", error);
     }
 
-    // Create grid tiles on canvas
-    for (let i = 0; i < 16 * 32; i++) {
-        const tile = document.createElement("div");
-        tile.classList.add("canvas-tile");
-        canvas.appendChild(tile);
-    }
-
-    // Canvas event listeners for drag-and-drop
+    // Drag-and-drop handlers remain the same
     canvas.addEventListener("dragover", dragOver);
     canvas.addEventListener("drop", drop);
 
-    // Drag-and-drop handlers
     function dragStart(event) {
         const isIconGlyph = event.target.classList.contains("icon-glyph");
         event.dataTransfer.setData("text/plain", event.target.textContent);
         event.dataTransfer.setData("font-family", isIconGlyph ? "Material Symbols Outlined" : "Bruno Ace SC");
 
-        // Include font size in data transfer
         const fontSize = event.target.style.fontSize || "48px";
         event.dataTransfer.setData("font-size", fontSize);
 
-        // Include span width in data transfer
         const spanWidth = event.target.dataset.spanWidth || 1;
         event.dataTransfer.setData("span-width", spanWidth);
 
-        // Include offset in data transfer
         const offsetX = event.target.dataset.offsetX || 0;
         const offsetY = event.target.dataset.offsetY || 0;
         event.dataTransfer.setData("offset-x", offsetX);
         event.dataTransfer.setData("offset-y", offsetY);
-
-        console.log("Drag started:", event.target.textContent, "Size:", fontSize, "Span Width:", spanWidth, "Offset:", offsetX, offsetY); // Log drag start with size, span width, and offset
     }
 
     function dragOver(event) {
@@ -94,21 +91,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
-            // Apply the glyph to the starting tile
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
             targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
-            targetTile.style.width = `${72 * spanWidth}px`; // Set the width to span multiple tiles if needed
+            targetTile.style.width = `${72 * spanWidth}px`;
             targetTile.style.overflow = "hidden";
 
-            // Apply fine adjustment using offset
             targetTile.style.position = "relative";
             targetTile.style.left = `${offsetX}px`;
             targetTile.style.top = `${offsetY}px`;
-
-            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Offset:", offsetX, offsetY); // Log drop with span width and offset
         }
     }
 });
