@@ -17,11 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.onload = (e) => {
             try {
                 const glyphs = JSON.parse(e.target.result);
-                console.log("Parsed glyphs data from uploaded JSON:", glyphs);
-
                 renderGlyphs(glyphs);
-
-                jsonUpload.value = ''; // Clear the file input to allow re-selection of the same file
+                jsonUpload.value = ''; // Clear file input to allow re-selection
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
                 alert("Invalid JSON file. Please check the structure and try again.");
@@ -40,9 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
             canvas.appendChild(tile);
         }
         console.log("Canvas reset.");
-
-        glyphSelection.innerHTML = "";
-        console.log("Selection area cleared.");
     }
 
     function renderGlyphs(glyphs) {
@@ -68,13 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
 
-            // Place on canvas using column and row properties if present
             if (glyph.column !== undefined && glyph.row !== undefined) {
-                const tileIndex = (glyph.row - 1) * 16 + (glyph.column - 1); // Adjusting for 1-based indexing
+                const tileIndex = (glyph.row - 1) * 16 + (glyph.column - 1);
                 placeGlyphOnCanvas(glyph, tileIndex);
             }
         });
-        console.log("Glyphs rendered from uploaded JSON.");
     }
 
     function placeGlyphOnCanvas(glyph, tileIndex) {
@@ -85,7 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
-            // Updated text-shadow with 2px blur radius
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
@@ -119,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function dragOver(event) {
-        event.preventDefault(); // Necessary for allowing drops
+        event.preventDefault();
     }
 
     function drop(event) {
@@ -138,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
 
-            // Updated text-shadow with 2px blur radius
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * spanWidth}px`;
             targetTile.style.overflow = "hidden";
@@ -152,5 +142,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const isClipped = contentWidth > availableWidth;
             targetTile.style.color = isClipped ? "red" : "white";
         }
+    }
+
+    function exportCanvasAsPNG() {
+        // Capture the canvas without background
+        html2canvas(canvas, { backgroundColor: null }).then(canvasElement => {
+            const link = document.createElement("a");
+            link.href = canvasElement.toDataURL("image/png");
+            link.download = "canvas.png";
+            link.click();
+        });
     }
 });
