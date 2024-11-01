@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = event.target.files[0];
         if (!file) return;
 
-        // Log and reset the canvas as soon as a file is chosen
-        console.log("New file chosen, resetting canvas.");
+        // Clear both canvas and selection area before loading new JSON
         resetCanvas();
+        clearSelectionArea();
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -33,12 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to reset the canvas
     function resetCanvas() {
-        // Clear existing canvas tiles by removing each child element individually
-        while (canvas.firstChild) {
-            canvas.removeChild(canvas.firstChild);
-        }
-
-        // Recreate 16x32 canvas tiles with drag-and-drop event listeners
+        canvas.innerHTML = ""; // Clear all existing canvas tiles
         for (let i = 0; i < 16 * 32; i++) {
             const tile = document.createElement("div");
             tile.classList.add("canvas-tile");
@@ -46,14 +41,17 @@ document.addEventListener("DOMContentLoaded", () => {
             tile.addEventListener("drop", drop);
             canvas.appendChild(tile);
         }
-        console.log("Canvas reset and reinitialized with new tiles.");
+        console.log("Canvas reset and reinitialized.");
+    }
+
+    // Function to clear the selection area
+    function clearSelectionArea() {
+        glyphSelection.innerHTML = ""; // Clear any existing glyphs in the selection area
+        console.log("Selection area cleared.");
     }
 
     // Render glyphs from JSON data
     function renderGlyphs(glyphs) {
-        // Clear any existing glyphs in the selection area
-        glyphSelection.innerHTML = "";
-
         glyphs.forEach(glyph => {
             const glyphElement = document.createElement("div");
             glyphElement.textContent = glyph.content;
