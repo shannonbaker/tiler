@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
     const glyphSelection = document.getElementById("glyph-selection");
     const jsonUpload = document.getElementById("jsonUpload");
-    const resetButton = document.getElementById("resetButton"); // Get reset button
+    const resetButton = document.getElementById("resetButton");
 
     // Event listener for the reset button
     resetButton.addEventListener("click", resetAll);
@@ -15,8 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = event.target.files[0];
         if (!file) return;
 
-        // Clear the selection area and canvas for new JSON data
-        resetAll();
+        resetAll(); // Clear canvas and selection area
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -36,11 +35,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to reset both the canvas and selection area
     function resetAll() {
-        // Clear canvas
+        // Clear and reinitialize canvas tiles
         canvas.innerHTML = "";
-        console.log("Canvas cleared.");
+        for (let i = 0; i < 16 * 32; i++) {
+            const tile = document.createElement("div");
+            tile.classList.add("canvas-tile");
+            tile.addEventListener("dragover", dragOver);
+            tile.addEventListener("drop", drop);
+            canvas.appendChild(tile);
+        }
+        console.log("Canvas reset.");
 
-        // Clear selection area
+        // Clear glyph selection area
         glyphSelection.innerHTML = "";
         console.log("Selection area cleared.");
     }
@@ -69,13 +75,14 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.dataset.offsetX = glyph.offset?.x || 0;
             glyphElement.dataset.offsetY = glyph.offset?.y || 0;
 
+            // Add dragstart event listener to make the glyph draggable
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement); // Add glyph to selection area
         });
         console.log("Glyphs rendered from uploaded JSON.");
     }
 
-    // Drag-and-drop handlers remain the same
+    // Drag-and-drop handlers
     function dragStart(event) {
         const isIconGlyph = event.target.classList.contains("icon-glyph");
         event.dataTransfer.setData("text/plain", event.target.textContent);
@@ -94,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function dragOver(event) {
-        event.preventDefault();
+        event.preventDefault(); // Necessary for allowing drops
     }
 
     function drop(event) {
