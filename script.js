@@ -19,14 +19,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             glyphElement.draggable = true;
             glyphElement.classList.add("glyph");
 
-            // Apply specific classes based on glyph type
+            // Apply specific classes and styles based on glyph type
             if (glyph.type === "icon") {
                 glyphElement.classList.add("icon-glyph", "material-symbols-outlined");
             } else if (glyph.type === "text") {
                 glyphElement.classList.add("text-glyph");
             }
 
-            // Add dragstart event listener
+            // Set font size based on the size property, defaulting to 48 if undefined
+            const fontSize = glyph.size || 48;
+            glyphElement.style.fontSize = `${fontSize}px`;
+
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
         });
@@ -54,7 +57,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         event.dataTransfer.setData("text/plain", event.target.textContent);
         event.dataTransfer.setData("font-family", isIconGlyph ? "Material Symbols Outlined" : "Bruno Ace SC");
 
-        console.log("Drag started:", event.target.textContent); // Log drag start
+        // Include font size in data transfer
+        const fontSize = event.target.style.fontSize || "48px";
+        event.dataTransfer.setData("font-size", fontSize);
+
+        console.log("Drag started:", event.target.textContent, "Size:", fontSize); // Log drag start with size
     }
 
     function dragOver(event) {
@@ -65,11 +72,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         event.preventDefault();
         const symbol = event.dataTransfer.getData("text/plain");
         const fontFamily = event.dataTransfer.getData("font-family");
+        const fontSize = event.dataTransfer.getData("font-size");
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
+            targetTile.style.fontSize = fontSize;
 
             if (fontFamily === "Material Symbols Outlined") {
                 targetTile.classList.add("material-symbols-outlined");
@@ -77,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 targetTile.classList.remove("material-symbols-outlined");
             }
 
-            console.log("Dropped:", symbol); // Log drop event
+            console.log("Dropped:", symbol, "Size:", fontSize); // Log drop event with size
         }
     }
 });

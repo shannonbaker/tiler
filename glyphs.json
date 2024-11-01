@@ -1,7 +1,8 @@
 [
     {
         "type": "icon",
-        "content": "home"
+        "content": "home",
+        "size": 64
     },
     {
         "type": "icon",
@@ -13,18 +14,12 @@
     },
     {
         "type": "text",
-        "content": "KM"
+        "content": "KM",
+        "size": 52
     },
     {
         "type": "text",
-        "content": "MI"
-    },
-    {
-        "type": "text",
-        "content": "Volt"
-    },
-    {
-        "type": "text",
-        "content": "HDOP"
+        "content": "MILES",
+        "size": 18
     }
 ]
