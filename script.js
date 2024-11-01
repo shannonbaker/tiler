@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const fontSize = glyph.size || 48;
             glyphElement.style.fontSize = `${fontSize}px`;
 
-            // Set data attributes for span information
+            // Set data attributes for span information, defaulting to 1 if undefined
             glyphElement.dataset.spanWidth = glyph.spanWidth || 1;
 
             glyphElement.addEventListener("dragstart", dragStart);
@@ -79,24 +79,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         event.preventDefault();
         const symbol = event.dataTransfer.getData("text/plain");
         const fontFamily = event.dataTransfer.getData("font-family");
-        const fontSize = event.dataTransfer.getData("font-size");
+        const fontSize = parseInt(event.dataTransfer.getData("font-size"), 10);
         const spanWidth = parseInt(event.dataTransfer.getData("span-width"), 10);
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
-            // Apply the glyph to the starting tile
+            // Determine if clipping will occur
+            const requiredWidth = fontSize * 0.6; // Approximate width per character based on font size
+            const totalSpanWidth = 72 * spanWidth;
+            const isClipped = totalSpanWidth < requiredWidth;
+
+            // Apply the glyph to the starting tile with color based on clipping
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
-            targetTile.style.fontSize = fontSize;
-            targetTile.classList.add("material-symbols-outlined");
-            targetTile.style.color = "white";
+            targetTile.style.fontSize = `${fontSize}px`;
+            targetTile.style.color = isClipped ? "red" : "white";
             targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
+            targetTile.classList.add("material-symbols-outlined");
 
             // Clip the visible portion of the glyph based on spanWidth
             targetTile.style.width = `${72 * spanWidth}px`;
             targetTile.style.overflow = "hidden";
 
-            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth); // Log drop with span width
+            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Clipped:", isClipped); // Log drop with span width and clipping status
         }
     }
 });
