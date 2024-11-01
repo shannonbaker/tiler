@@ -1,6 +1,19 @@
 function exportCanvasAsPNG() {
-    html2canvas(document.getElementById("canvas"), { backgroundColor: null }).then(canvasElement => {
-        canvasElement.toBlob(blob => {
+    // Temporarily remove borders and gridlines
+    const tiles = document.querySelectorAll(".canvas-tile");
+    const canvasElement = document.getElementById("canvas");
+
+    // Save the original border styles
+    const originalCanvasBorder = canvasElement.style.border;
+    canvasElement.style.border = "none";
+
+    tiles.forEach(tile => {
+        tile.style.border = "none";
+    });
+
+    // Capture the canvas without borders or gridlines
+    html2canvas(canvasElement, { backgroundColor: null }).then(capturedCanvas => {
+        capturedCanvas.toBlob(blob => {
             if (blob) {
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
@@ -15,6 +28,12 @@ function exportCanvasAsPNG() {
         }, "image/png");
     }).catch(error => {
         console.error("An error occurred during PNG export:", error);
+    }).finally(() => {
+        // Restore original border styles
+        canvasElement.style.border = originalCanvasBorder;
+        tiles.forEach(tile => {
+            tile.style.border = "1px dashed #ddd";
+        });
     });
 }
 
@@ -72,11 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphContainer.classList.add("glyph");
             glyphContainer.draggable = true;
 
-            const shadow = document.createElement("span");
-            shadow.classList.add("shadow");
-            shadow.textContent = glyph.content;
-            glyphContainer.appendChild(shadow);
-
             const glyphContent = document.createElement("span");
             glyphContent.classList.add("content");
             glyphContent.textContent = glyph.content;
@@ -86,13 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (glyph.type === "icon") {
                 glyphContainer.classList.add("icon-glyph", "material-symbols-outlined");
                 glyphContent.classList.add("material-symbols-outlined");
-                shadow.classList.add("material-symbols-outlined");
             } else if (glyph.type === "text") {
                 glyphContainer.classList.add("text-glyph");
-            }
-
-            if (glyph.mirror) {
-                glyphContent.style.transform = "scaleX(-1)";
             }
 
             glyphContainer.dataset.spanWidth = glyph.spanWidth || 1;
@@ -113,11 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const targetTile = canvas.children[tileIndex];
         if (targetTile && targetTile.classList.contains("canvas-tile")) {
             targetTile.innerHTML = "";
-            const shadow = document.createElement("span");
-            shadow.classList.add("shadow");
-            shadow.textContent = glyph.content;
-            targetTile.appendChild(shadow);
-
             const glyphContent = document.createElement("span");
             glyphContent.classList.add("content");
             glyphContent.textContent = glyph.content;
@@ -126,10 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontFamily = glyph.type === "icon" ? "Material Symbols Outlined" : "Bruno Ace SC";
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
-
-            if (glyph.mirror) {
-                glyphContent.style.transform = "scaleX(-1)";
-            }
 
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
@@ -173,11 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (targetTile.classList.contains("canvas-tile")) {
             targetTile.innerHTML = "";
-            const shadow = document.createElement("span");
-            shadow.classList.add("shadow");
-            shadow.textContent = symbol;
-            targetTile.appendChild(shadow);
-
             const glyphContent = document.createElement("span");
             glyphContent.classList.add("content");
             glyphContent.textContent = symbol;
@@ -193,10 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.left = `${offsetX}px`;
             targetTile.style.top = `${offsetY}px`;
             targetTile.style.color = "white";
-
-            if (event.dataTransfer.getData("mirror") === "true") {
-                glyphContent.style.transform = "scaleX(-1)";
-            }
         }
     }
 });
