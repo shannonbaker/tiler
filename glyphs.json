@@ -30,5 +30,11 @@
         "content": "ALT",
         "size": 36,
         "spanWidth": 2
+    },
+    {
+        "type": "text",
+        "content": "RSSI",
+        "size": 36,
+        "spanWidth": 2
     }
 ]
