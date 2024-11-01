@@ -22,5 +22,9 @@
     {
         "type": "text",
         "content": "Volt"
+    },
+    {
+        "type": "text",
+        "content": "HDOP"
     }
 ]
