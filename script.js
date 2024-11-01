@@ -96,11 +96,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Temporarily set the color to white for measurement
             targetTile.style.color = "white";
 
-            // Measure the actual rendered width of the content, including an additional shadow offset
-            const shadowOffset = 8; // Shadow extends 4px on each side, adding 8px total width
-            const contentWidth = targetTile.scrollWidth + shadowOffset;
+            // Measure the actual rendered width of the content
+            const contentWidth = targetTile.scrollWidth;
 
-            // Check if the rendered width (including shadow) exceeds the available width for the span
+            // Check if the rendered width exceeds the available width for the span
             const availableWidth = 72 * spanWidth;
             const isClipped = contentWidth > availableWidth;
 
@@ -110,4 +109,5 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Clipped:", isClipped); // Log drop with span width and clipping status
         }
     }
+
 });
