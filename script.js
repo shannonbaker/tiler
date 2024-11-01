@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function resetAll() {
         canvas.innerHTML = "";
+        glyphSelection.innerHTML = ""; // Clear the selection area
+
         for (let i = 0; i < 16 * 32; i++) {
             const tile = document.createElement("div");
             tile.classList.add("canvas-tile");
@@ -36,8 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
             tile.addEventListener("drop", drop);
             canvas.appendChild(tile);
         }
-        console.log("Canvas reset.");
+        console.log("Canvas and selection area reset.");
     }
+
 
     function renderGlyphs(glyphs) {
         glyphs.forEach(glyph => {
@@ -145,18 +148,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function exportCanvasAsPNG() {
-        // Capture the canvas without background
         html2canvas(canvas, { backgroundColor: null }).then(canvasElement => {
-            canvasElement.toBlob(blob => {
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "canvas.png";
-                link.click();
+            const link = document.createElement("a");
+            link.href = canvasElement.toDataURL("image/png");
+            link.download = "canvas.png";
+            link.click();
 
-                // Release the URL object after download
-                URL.revokeObjectURL(link.href);
-                console.log("PNG file has been generated and saved as 'canvas.png'.");
-            }, "image/png");
+            console.log("PNG file has been generated and saved as 'canvas.png'.");
         }).catch(error => {
             console.error("An error occurred during PNG export:", error);
         });
