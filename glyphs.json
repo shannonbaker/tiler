@@ -22,5 +22,11 @@
         "content": "MILES",
         "size": 48,
         "spanWidth": 2
+    },
+    {
+        "type": "text",
+        "content": "ALT^",
+        "size": 48,
+        "spanWidth": 1
     }
 ]
