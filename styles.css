@@ -31,9 +31,7 @@ body {
 
 .canvas {
     width: 1152px;
-    /* 16 columns * 72px */
     height: 3456px;
-    /* 32 rows * 108px */
     display: grid;
     grid-template-columns: repeat(16, 72px);
     grid-template-rows: repeat(32, 108px);
@@ -41,10 +39,8 @@ body {
     border: 1px solid #ccc;
     position: relative;
     background-color: #f0f0f0;
-    /* Light grey background */
 }
 
-/* Canvas tile styling to show glyphs with white color and shadow */
 .canvas-tile {
     width: 72px;
     height: 108px;
@@ -56,9 +52,7 @@ body {
     color: white;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    /* Clip any overflowed content */
     white-space: nowrap;
-    /* Prevent text wrapping */
     text-align: center;
 }
 
@@ -66,9 +60,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Space between the label and the file input */
     margin-bottom: 20px;
-    /* Space below the upload section */
 }
 
 label {

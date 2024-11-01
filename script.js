@@ -1,3 +1,24 @@
+function exportCanvasAsPNG() {
+    html2canvas(document.getElementById("canvas"), { backgroundColor: null }).then(canvasElement => {
+        canvasElement.toBlob(blob => {
+            if (blob) {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "canvas.png";
+                document.body.appendChild(link); // Append link for Firefox compatibility
+                link.click();
+                document.body.removeChild(link); // Clean up
+                URL.revokeObjectURL(link.href);
+                console.log("PNG file should be saved as 'canvas.png'.");
+            } else {
+                console.error("Failed to create PNG blob.");
+            }
+        }, "image/png");
+    }).catch(error => {
+        console.error("An error occurred during PNG export:", error);
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
     const glyphSelection = document.getElementById("glyph-selection");
@@ -40,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         console.log("Canvas and selection area reset.");
     }
-
 
     function renderGlyphs(glyphs) {
         glyphs.forEach(glyph => {
@@ -146,32 +166,4 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.color = isClipped ? "red" : "white";
         }
     }
-
-    function exportCanvasAsPNG() {
-        html2canvas(canvas, { backgroundColor: null }).then(canvasElement => {
-            canvasElement.toBlob(blob => {
-                if (blob) {
-                    // Display the blob as an image in a new tab for debugging
-                    const blobUrl = URL.createObjectURL(blob);
-                    window.open(blobUrl, "_blank");
-
-                    // Attempt to trigger the download
-                    const link = document.createElement("a");
-                    link.href = blobUrl;
-                    link.download = "canvas.png";
-                    link.click();
-
-                    // Clean up the blob URL
-                    URL.revokeObjectURL(blobUrl);
-                    console.log("PNG file has been generated, opened in a new tab, and should be saved as 'canvas.png'.");
-                } else {
-                    console.error("Failed to create PNG blob.");
-                }
-            }, "image/png");
-        }).catch(error => {
-            console.error("An error occurred during PNG export:", error);
-        });
-    }
-
-
 });
