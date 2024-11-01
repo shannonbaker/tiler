@@ -11,16 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = event.target.files[0];
         if (!file) return;
 
+        // Log and reset the canvas as soon as a file is chosen
+        console.log("New file chosen, resetting canvas.");
+        resetCanvas();
+
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
                 const glyphs = JSON.parse(e.target.result);
-                console.log("Uploaded glyphs data:", glyphs);
+                console.log("Parsed glyphs data from uploaded JSON:", glyphs);
 
-                // Reset the canvas
-                resetCanvas();
-
-                // Render new glyphs
+                // Render new glyphs after canvas reset
                 renderGlyphs(glyphs);
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
@@ -32,7 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to reset the canvas
     function resetCanvas() {
-        canvas.innerHTML = ""; // Clear existing canvas tiles
+        // Clear existing canvas tiles by removing each child element individually
+        while (canvas.firstChild) {
+            canvas.removeChild(canvas.firstChild);
+        }
+
+        // Recreate 16x32 canvas tiles with drag-and-drop event listeners
         for (let i = 0; i < 16 * 32; i++) {
             const tile = document.createElement("div");
             tile.classList.add("canvas-tile");
@@ -40,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tile.addEventListener("drop", drop);
             canvas.appendChild(tile);
         }
-        console.log("Canvas reset and reinitialized.");
+        console.log("Canvas reset and reinitialized with new tiles.");
     }
 
     // Render glyphs from JSON data
@@ -73,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement); // Add glyph to selection area
         });
-        console.log("Glyphs rendered from uploaded JSON."); // Confirm rendering
+        console.log("Glyphs rendered from uploaded JSON.");
     }
 
     // Drag-and-drop handlers remain the same
