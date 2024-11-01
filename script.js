@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
 
-            // Place on canvas only if both column and row are specified
+            // Place on canvas using column and row properties if present
             if (glyph.column !== undefined && glyph.row !== undefined) {
                 const tileIndex = (glyph.row - 1) * 16 + (glyph.column - 1); // Adjusting for 1-based indexing
                 placeGlyphOnCanvas(glyph, tileIndex);
