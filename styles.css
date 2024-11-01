@@ -22,8 +22,9 @@ body {
 
 /* Style for text glyphs */
 .glyph.text-glyph {
-    font-family: 'Bruno Ace SC', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 48px;
+    font-weight: 700;
     cursor: grab;
     color: white;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
