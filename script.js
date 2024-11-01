@@ -58,16 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Glyphs rendered from uploaded JSON."); // Confirm rendering
     }
 
-    // Create grid tiles on canvas
+    // Create grid tiles on canvas with necessary event listeners
     for (let i = 0; i < 16 * 32; i++) {
         const tile = document.createElement("div");
         tile.classList.add("canvas-tile");
+        tile.addEventListener("dragover", dragOver);
+        tile.addEventListener("drop", drop);
         canvas.appendChild(tile);
     }
-
-    // Canvas event listeners for drag-and-drop
-    canvas.addEventListener("dragover", dragOver);
-    canvas.addEventListener("drop", drop);
 
     // Drag-and-drop handlers remain the same
     function dragStart(event) {
