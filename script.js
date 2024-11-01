@@ -90,18 +90,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             targetTile.style.fontSize = fontSize;
             targetTile.classList.add("material-symbols-outlined");
             targetTile.style.color = "white";
-            targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
+            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
 
-            // Adjust tiles based on span width
-            const tileIndex = Array.from(canvas.children).indexOf(targetTile);
-
-            for (let col = 1; col < spanWidth; col++) {
-                const nextTile = canvas.children[tileIndex + col];
-                if (nextTile) {
-                    nextTile.textContent = ""; // Clear content of spanned tile
-                    nextTile.style.backgroundColor = "rgba(255, 255, 255, 0.1)"; // Set transparent background
-                }
-            }
+            // Clip the visible portion of the glyph based on spanWidth
+            targetTile.style.width = `${72 * spanWidth}px`;
+            targetTile.style.overflow = "hidden";
 
             console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth); // Log drop with span width
         }
