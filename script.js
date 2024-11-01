@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.onload = (e) => {
             try {
                 const glyphs = JSON.parse(e.target.result);
-                renderGlyphs(glyphs);
+                loadFontsAndRenderGlyphs(glyphs); // Wait for fonts before rendering glyphs
                 jsonUpload.value = ''; // Clear file input to allow re-selection
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
@@ -60,6 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
             canvas.appendChild(tile);
         }
         console.log("Canvas and selection area reset.");
+    }
+
+    function loadFontsAndRenderGlyphs(glyphs) {
+        // Wait for fonts to load before rendering glyphs
+        document.fonts.ready.then(() => {
+            renderGlyphs(glyphs);
+            setTimeout(adjustClippingAfterLoad, 0); // Check clipping after rendering
+        });
     }
 
     function renderGlyphs(glyphs) {
@@ -91,9 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 placeGlyphOnCanvas(glyph, tileIndex);
             }
         });
-
-        // Call adjustClippingAfterLoad after all glyphs are placed
-        setTimeout(adjustClippingAfterLoad, 0); // Delay to ensure render completion
     }
 
     function placeGlyphOnCanvas(glyph, tileIndex) {
