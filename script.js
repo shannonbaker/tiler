@@ -1,17 +1,23 @@
 function exportCanvasAsPNG() {
     // Remove borders temporarily
     const tiles = document.querySelectorAll(".canvas-tile");
+    const canvasElement = document.getElementById("canvas");
+
+    // Store the original border style
+    const originalCanvasBorder = canvasElement.style.border;
+    canvasElement.style.border = "none"; // Remove canvas border
+
     tiles.forEach(tile => {
-        tile.style.border = "none";
+        tile.style.border = "none"; // Remove each tile border
     });
 
-    html2canvas(document.getElementById("canvas"), { backgroundColor: null }).then(canvasElement => {
-        canvasElement.toBlob(blob => {
+    html2canvas(canvasElement, { backgroundColor: null }).then(capturedCanvas => {
+        capturedCanvas.toBlob(blob => {
             if (blob) {
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = "canvas.png";
-                document.body.appendChild(link); // Needed for Firefox compatibility
+                document.body.appendChild(link); // Append for Firefox compatibility
                 link.click();
                 document.body.removeChild(link); // Clean up
                 URL.revokeObjectURL(link.href);
@@ -23,12 +29,14 @@ function exportCanvasAsPNG() {
     }).catch(error => {
         console.error("An error occurred during PNG export:", error);
     }).finally(() => {
-        // Restore borders after saving
+        // Restore the original border styles after saving
+        canvasElement.style.border = originalCanvasBorder;
         tiles.forEach(tile => {
             tile.style.border = "1px dashed #ddd";
         });
     });
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
