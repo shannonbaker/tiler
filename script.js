@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphSelection.appendChild(glyphElement);
 
             if (glyph.column !== undefined && glyph.row !== undefined) {
-                const tileIndex = glyph.row * 16 + glyph.column;
+                const tileIndex = (glyph.row - 1) * 16 + (glyph.column - 1); // Adjusting for 1-based indexing
                 placeGlyphOnCanvas(glyph, tileIndex);
             }
         });
