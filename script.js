@@ -68,33 +68,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function renderGlyphs(glyphs) {
         glyphs.forEach((glyph) => {
-            const glyphElement = document.createElement("div");
-            glyphElement.textContent = glyph.content;
-            glyphElement.draggable = true;
-            glyphElement.classList.add("glyph");
+            const glyphContainer = document.createElement("div"); // Outer div for shadow
+            glyphContainer.classList.add("glyph");
+            glyphContainer.draggable = true;
 
+            const glyphContent = document.createElement("span"); // Inner span for mirroring
+            glyphContent.textContent = glyph.content;
+            glyphContent.style.fontSize = `${glyph.size || 48}px`;
+            glyphContainer.appendChild(glyphContent);
+
+            // Set class based on glyph type
             if (glyph.type === "icon") {
-                glyphElement.classList.add("icon-glyph", "material-symbols-outlined");
+                glyphContainer.classList.add("icon-glyph", "material-symbols-outlined");
+                glyphContent.classList.add("material-symbols-outlined");
             } else if (glyph.type === "text") {
-                glyphElement.classList.add("text-glyph");
+                glyphContainer.classList.add("text-glyph");
             }
 
-            const fontSize = glyph.size || 48;
-            glyphElement.style.fontSize = `${fontSize}px`;
-
-            // Apply mirroring transformation in the selection area if `mirror: true`
+            // Apply mirroring transformation to inner span only if `mirror: true`
             if (glyph.mirror) {
-                glyphElement.style.transform = "scaleX(-1)"; // Flip horizontally
+                glyphContent.style.transform = "scaleX(-1)"; // Flip horizontally
             }
 
-            glyphElement.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
+            // Apply shadow to the outer container only
+            glyphContainer.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
 
-            glyphElement.dataset.spanWidth = glyph.spanWidth || 1;
-            glyphElement.dataset.offsetX = glyph.offset?.x || 0;
-            glyphElement.dataset.offsetY = glyph.offset?.y || 0;
+            glyphContainer.dataset.spanWidth = glyph.spanWidth || 1;
+            glyphContainer.dataset.offsetX = glyph.offset?.x || 0;
+            glyphContainer.dataset.offsetY = glyph.offset?.y || 0;
 
-            glyphElement.addEventListener("dragstart", dragStart);
-            glyphSelection.appendChild(glyphElement);
+            glyphContainer.addEventListener("dragstart", dragStart);
+            glyphSelection.appendChild(glyphContainer);
 
             if (glyph.column !== undefined && glyph.row !== undefined) {
                 const tileIndex = (glyph.row - 1) * 16 + (glyph.column - 1);
@@ -106,16 +110,22 @@ document.addEventListener("DOMContentLoaded", () => {
     function placeGlyphOnCanvas(glyph, tileIndex) {
         const targetTile = canvas.children[tileIndex];
         if (targetTile && targetTile.classList.contains("canvas-tile")) {
-            targetTile.textContent = glyph.content;
+            targetTile.innerHTML = ""; // Clear previous content
+            const glyphContent = document.createElement("span"); // Inner span for mirroring
+            glyphContent.textContent = glyph.content;
+            targetTile.appendChild(glyphContent);
+
+            // Set font styles based on type
             targetTile.style.fontFamily = glyph.type === "icon" ? "Material Symbols Outlined" : "Bruno Ace SC";
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
-            // Apply mirroring transformation if the glyph has `mirror: true`
+            // Apply mirroring to inner span if `mirror: true`
             if (glyph.mirror) {
-                targetTile.style.transform = "scaleX(-1)"; // Flip horizontally
+                glyphContent.style.transform = "scaleX(-1)";
             }
 
+            // Apply shadow to the outer tile only
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
@@ -158,7 +168,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
-            targetTile.textContent = symbol;
+            targetTile.innerHTML = ""; // Clear previous content
+            const glyphContent = document.createElement("span");
+            glyphContent.textContent = symbol;
+            targetTile.appendChild(glyphContent);
+
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
@@ -171,11 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.top = `${offsetY}px`;
             targetTile.style.color = "white";
 
-            // Apply mirroring if `mirror` attribute is true in drag-and-drop
+            // Apply mirroring to inner span if `mirror` is true
             if (event.dataTransfer.getData("mirror") === "true") {
-                targetTile.style.transform = "scaleX(-1)";
-            } else {
-                targetTile.style.transform = "none";
+                glyphContent.style.transform = "scaleX(-1)";
             }
         }
     }
