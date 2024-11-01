@@ -15,18 +15,18 @@
     },
     {
         "type": "text",
-        "content": "KM"
+        "content": "KM",
+        "size": 36
     },
     {
         "type": "text",
-        "content": "MILES",
+        "content": "HDOP",
         "size": 48,
         "spanWidth": 2
     },
     {
         "type": "text",
         "content": "ALT",
-        "size": 48,
-        "spanWidth": 1
+        "size": 36
     }
 ]
