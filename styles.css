@@ -61,3 +61,17 @@ body {
     /* Prevent text wrapping */
     text-align: center;
 }
+
+.upload-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Space between the label and the file input */
+    margin-bottom: 20px;
+    /* Space below the upload section */
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+}
