@@ -120,24 +120,27 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
-            // Apply text shadow and other styles
+            // Apply text shadow and other styling
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
             targetTile.style.position = "relative";
             targetTile.style.left = `${glyph.offset?.x || 0}px`;
             targetTile.style.top = `${glyph.offset?.y || 0}px`;
-            targetTile.style.color = "white";
+            targetTile.style.color = "white"; // Default to white color
 
-            // Calculate content width and determine if it is truly clipped
-            const contentWidth = targetTile.scrollWidth;
-            const availableWidth = 72 * (glyph.spanWidth || 1) - Math.abs(glyph.offset?.x || 0);
-            const isClipped = contentWidth > availableWidth;
+            // Delay the clipping calculation to ensure accurate dimensions after rendering
+            setTimeout(() => {
+                const contentWidth = targetTile.scrollWidth;
+                const availableWidth = 72 * (glyph.spanWidth || 1) - Math.abs(glyph.offset?.x || 0);
+                const isClipped = contentWidth > availableWidth;
 
-            // Set color based on clipping status
-            targetTile.style.color = isClipped ? "red" : "white";
+                // Set the color based on whether clipping occurs
+                targetTile.style.color = isClipped ? "red" : "white";
+            }, 0); // Delay of 0ms to let rendering complete
         }
     }
+
 
 
     function dragStart(event) {
