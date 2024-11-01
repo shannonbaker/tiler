@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Render new glyphs
                 renderGlyphs(glyphs);
+
+                // Clear the file input to allow re-selection of the same file
+                jsonUpload.value = '';
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
                 alert("Invalid JSON file. Please check the structure and try again.");
