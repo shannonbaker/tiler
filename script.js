@@ -105,15 +105,24 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
+            // Apply text shadow and other styles
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
             targetTile.style.position = "relative";
             targetTile.style.left = `${glyph.offset?.x || 0}px`;
             targetTile.style.top = `${glyph.offset?.y || 0}px`;
-            targetTile.style.color = "white";
+            targetTile.style.color = "white"; // Default color before clipping check
+
+            // Apply mirroring transformation if the glyph has `mirror: true`
+            if (glyph.mirror) {
+                targetTile.style.transform = "scaleX(-1)"; // Flip horizontally
+            } else {
+                targetTile.style.transform = "none"; // No flip
+            }
         }
     }
+
 
     function adjustClippingAfterLoad() {
         const tiles = document.querySelectorAll(".canvas-tile");
