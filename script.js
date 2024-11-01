@@ -5,11 +5,10 @@ function exportCanvasAsPNG() {
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = "canvas.png";
-                document.body.appendChild(link); // Needed for Firefox compatibility
+                document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link); // Clean up
+                document.body.removeChild(link);
                 URL.revokeObjectURL(link.href);
-                console.log("PNG file saved with a transparent background as 'canvas.png'.");
             } else {
                 console.error("Failed to create PNG blob.");
             }
@@ -38,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.onload = (e) => {
             try {
                 const glyphs = JSON.parse(e.target.result);
-                loadFontsAndRenderGlyphs(glyphs); // Wait for fonts before rendering glyphs
-                jsonUpload.value = ''; // Clear file input to allow re-selection
+                loadFontsAndRenderGlyphs(glyphs);
+                jsonUpload.value = '';
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
                 alert("Invalid JSON file. Please check the structure and try again.");
@@ -50,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function resetAll() {
         canvas.innerHTML = "";
-        glyphSelection.innerHTML = ""; // Clear the selection area
+        glyphSelection.innerHTML = "";
 
         for (let i = 0; i < 16 * 32; i++) {
             const tile = document.createElement("div");
@@ -59,14 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
             tile.addEventListener("drop", drop);
             canvas.appendChild(tile);
         }
-        console.log("Canvas and selection area reset.");
     }
 
     function loadFontsAndRenderGlyphs(glyphs) {
-        // Wait for fonts to load before rendering glyphs
         document.fonts.ready.then(() => {
             renderGlyphs(glyphs);
-            setTimeout(adjustClippingAfterLoad, 0); // Check clipping after rendering
+            setTimeout(adjustClippingAfterLoad, 0);
         });
     }
 
@@ -93,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
 
-            // Place the glyph on the canvas
             if (glyph.column !== undefined && glyph.row !== undefined) {
                 const tileIndex = (glyph.row - 1) * 16 + (glyph.column - 1);
                 placeGlyphOnCanvas(glyph, tileIndex);
@@ -115,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.position = "relative";
             targetTile.style.left = `${glyph.offset?.x || 0}px`;
             targetTile.style.top = `${glyph.offset?.y || 0}px`;
-            targetTile.style.color = "white"; // Default color before clipping check
+            targetTile.style.color = "white";
         }
     }
 
@@ -126,10 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const contentWidth = tile.scrollWidth;
             const availableWidth = tile.offsetWidth - Math.abs(parseInt(tile.style.left || 0));
 
-            // Determine if clipping is occurring
             const isClipped = contentWidth > availableWidth;
 
-            // Apply color based on clipping
             tile.style.color = isClipped ? "red" : "white";
         });
     }
