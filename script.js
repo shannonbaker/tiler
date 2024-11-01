@@ -84,22 +84,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
-            // Determine if clipping will occur
-            const requiredWidth = fontSize * 0.6; // Approximate width per character based on font size
-            const totalSpanWidth = 72 * spanWidth;
-            const isClipped = totalSpanWidth < requiredWidth;
-
-            // Apply the glyph to the starting tile with color based on clipping
+            // Apply the glyph to the starting tile
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
-            targetTile.style.color = isClipped ? "red" : "white";
-            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
             targetTile.classList.add("material-symbols-outlined");
-
-            // Clip the visible portion of the glyph based on spanWidth
-            targetTile.style.width = `${72 * spanWidth}px`;
+            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
+            targetTile.style.width = `${72 * spanWidth}px`; // Set the width to span multiple tiles if needed
             targetTile.style.overflow = "hidden";
+
+            // Temporarily set the color to white for measurement
+            targetTile.style.color = "white";
+
+            // Measure the actual rendered width of the content
+            const contentWidth = targetTile.scrollWidth;
+
+            // Check if the rendered width exceeds the available width for the span
+            const availableWidth = 72 * spanWidth;
+            const isClipped = contentWidth > availableWidth;
+
+            // Set color to red if clipped, otherwise keep it white
+            targetTile.style.color = isClipped ? "red" : "white";
 
             console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Clipped:", isClipped); // Log drop with span width and clipping status
         }
