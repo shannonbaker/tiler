@@ -147,10 +147,18 @@ document.addEventListener("DOMContentLoaded", () => {
     function exportCanvasAsPNG() {
         // Capture the canvas without background
         html2canvas(canvas, { backgroundColor: null }).then(canvasElement => {
-            const link = document.createElement("a");
-            link.href = canvasElement.toDataURL("image/png");
-            link.download = "canvas.png";
-            link.click();
+            canvasElement.toBlob(blob => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "canvas.png";
+                link.click();
+
+                // Release the URL object after download
+                URL.revokeObjectURL(link.href);
+                console.log("PNG file has been generated and saved as 'canvas.png'.");
+            }, "image/png");
+        }).catch(error => {
+            console.error("An error occurred during PNG export:", error);
         });
     }
 });
