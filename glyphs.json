@@ -33,7 +33,7 @@
     },
     {
         "type": "text",
-        "content": "RSSI",
+        "content": "N",
         "size": 36,
         "spanWidth": 2
     }
