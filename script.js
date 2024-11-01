@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
-            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
+            targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * spanWidth}px`;
             targetTile.style.overflow = "hidden";
 
