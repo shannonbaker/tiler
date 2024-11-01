@@ -12,7 +12,11 @@
     {
         "type": "icon",
         "content": "favorite",
-        "size": 64
+        "size": 64,
+        "offset": {
+            "x": -5,
+            "y": 10
+        }
     },
     {
         "type": "text",
@@ -33,7 +37,7 @@
     },
     {
         "type": "text",
-        "content": "N",
+        "content": "S",
         "size": 36,
         "spanWidth": 1
     }

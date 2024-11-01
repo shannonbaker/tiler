@@ -30,8 +30,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             const fontSize = glyph.size || 48;
             glyphElement.style.fontSize = `${fontSize}px`;
 
-            // Set data attributes for span information, defaulting to 1 if undefined
+            // Set data attributes for span and offset information
             glyphElement.dataset.spanWidth = glyph.spanWidth || 1;
+            glyphElement.dataset.offsetX = glyph.offset?.x || 0;
+            glyphElement.dataset.offsetY = glyph.offset?.y || 0;
 
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
@@ -68,7 +70,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const spanWidth = event.target.dataset.spanWidth || 1;
         event.dataTransfer.setData("span-width", spanWidth);
 
-        console.log("Drag started:", event.target.textContent, "Size:", fontSize, "Span Width:", spanWidth); // Log drag start with size and span width
+        // Include offset in data transfer
+        const offsetX = event.target.dataset.offsetX || 0;
+        const offsetY = event.target.dataset.offsetY || 0;
+        event.dataTransfer.setData("offset-x", offsetX);
+        event.dataTransfer.setData("offset-y", offsetY);
+
+        console.log("Drag started:", event.target.textContent, "Size:", fontSize, "Span Width:", spanWidth, "Offset:", offsetX, offsetY); // Log drag start with size, span width, and offset
     }
 
     function dragOver(event) {
@@ -81,6 +89,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const fontFamily = event.dataTransfer.getData("font-family");
         const fontSize = parseInt(event.dataTransfer.getData("font-size"), 10);
         const spanWidth = parseInt(event.dataTransfer.getData("span-width"), 10);
+        const offsetX = parseInt(event.dataTransfer.getData("offset-x"), 10);
+        const offsetY = parseInt(event.dataTransfer.getData("offset-y"), 10);
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
@@ -93,21 +103,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             targetTile.style.width = `${72 * spanWidth}px`; // Set the width to span multiple tiles if needed
             targetTile.style.overflow = "hidden";
 
-            // Temporarily set the color to white for measurement
-            targetTile.style.color = "white";
+            // Apply fine adjustment using offset
+            targetTile.style.position = "relative";
+            targetTile.style.left = `${offsetX}px`;
+            targetTile.style.top = `${offsetY}px`;
 
-            // Measure the actual rendered width of the content
-            const contentWidth = targetTile.scrollWidth;
-
-            // Check if the rendered width exceeds the available width for the span
-            const availableWidth = 72 * spanWidth;
-            const isClipped = contentWidth > availableWidth;
-
-            // Set color to red if clipped, otherwise keep it white
-            targetTile.style.color = isClipped ? "red" : "white";
-
-            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Clipped:", isClipped); // Log drop with span width and clipping status
+            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Offset:", offsetX, offsetY); // Log drop with span width and offset
         }
     }
-
 });
