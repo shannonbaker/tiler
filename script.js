@@ -105,14 +105,13 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
-            // Apply text shadow and other styles
             targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
             targetTile.style.position = "relative";
             targetTile.style.left = `${glyph.offset?.x || 0}px`;
             targetTile.style.top = `${glyph.offset?.y || 0}px`;
-            targetTile.style.color = "white"; // Default color before clipping check
+            targetTile.style.color = "white";
 
             // Apply mirroring transformation if the glyph has `mirror: true`
             if (glyph.mirror) {
@@ -123,18 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
     function adjustClippingAfterLoad() {
-        const tiles = document.querySelectorAll(".canvas-tile");
-
-        tiles.forEach(tile => {
-            const contentWidth = tile.scrollWidth;
-            const availableWidth = tile.offsetWidth - Math.abs(parseInt(tile.style.left || 0));
-
-            const isClipped = contentWidth > availableWidth;
-
-            tile.style.color = isClipped ? "red" : "white";
-        });
+        // No clipping color adjustments needed
     }
 
     function dragStart(event) {
@@ -180,12 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.position = "relative";
             targetTile.style.left = `${offsetX}px`;
             targetTile.style.top = `${offsetY}px`;
-
             targetTile.style.color = "white";
-            const contentWidth = targetTile.scrollWidth;
-            const availableWidth = 72 * spanWidth - Math.abs(offsetX);
-            const isClipped = contentWidth > availableWidth;
-            targetTile.style.color = isClipped ? "red" : "white";
         }
     }
 });
