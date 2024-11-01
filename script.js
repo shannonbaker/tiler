@@ -66,7 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Wait for fonts to load before rendering glyphs
         document.fonts.ready.then(() => {
             renderGlyphs(glyphs);
-            setTimeout(adjustClippingAfterLoad, 0); // Check clipping after rendering
+            setTimeout(() => {
+                forceReflow();
+                adjustClippingAfterLoad(); // Check clipping after render and reflow
+            }, 100); // Add delay to ensure layout calculations complete
         });
     }
 
@@ -117,6 +120,13 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.top = `${glyph.offset?.y || 0}px`;
             targetTile.style.color = "white"; // Default color before clipping check
         }
+    }
+
+    function forceReflow() {
+        // Temporarily toggle display to force a reflow
+        canvas.style.display = 'none';
+        canvas.offsetHeight; // Force reflow
+        canvas.style.display = 'block';
     }
 
     function adjustClippingAfterLoad() {
