@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphContent.textContent = glyph.content;
             targetTile.appendChild(glyphContent);
 
-            targetTile.style.fontFamily = glyph.type === "icon" ? "Material Symbols Outlined" : "Bruno Ace SC";
+            targetTile.style.fontFamily = glyph.type === "icon" ? "Material Symbols Outlined" : "Roboto";
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
 
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function dragStart(event) {
         const isIconGlyph = event.target.classList.contains("icon-glyph");
         event.dataTransfer.setData("text/plain", event.target.textContent);
-        event.dataTransfer.setData("font-family", isIconGlyph ? "Material Symbols Outlined" : "Bruno Ace SC");
+        event.dataTransfer.setData("font-family", isIconGlyph ? "Material Symbols Outlined" : "Roboto");
 
         const fontSize = event.target.style.fontSize || "48px";
         event.dataTransfer.setData("font-size", fontSize);
