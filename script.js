@@ -68,8 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.addEventListener("dragstart", dragStart);
             glyphSelection.appendChild(glyphElement);
 
-            if (glyph.glyphNumber !== undefined) {
-                placeGlyphOnCanvas(glyph, glyph.glyphNumber);
+            if (glyph.column !== undefined && glyph.row !== undefined) {
+                const tileIndex = glyph.row * 16 + glyph.column;
+                placeGlyphOnCanvas(glyph, tileIndex);
             }
         });
         console.log("Glyphs rendered from uploaded JSON.");
