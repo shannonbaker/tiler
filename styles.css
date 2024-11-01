@@ -17,7 +17,7 @@ body {
     font-size: 48px;
     cursor: grab;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Style for text glyphs */
@@ -26,7 +26,7 @@ body {
     font-size: 48px;
     cursor: grab;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .canvas {
@@ -54,7 +54,7 @@ body {
     justify-content: center;
     font-size: 48px;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     /* Clip any overflowed content */
     white-space: nowrap;
