@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("canvas");
     const glyphSelection = document.getElementById("glyph-selection");
     const jsonUpload = document.getElementById("jsonUpload");
+    const resetButton = document.getElementById("resetButton"); // Get reset button
+
+    // Event listener for the reset button
+    resetButton.addEventListener("click", resetAll);
 
     // Event listener for file upload
     jsonUpload.addEventListener("change", handleFileUpload);
@@ -11,9 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = event.target.files[0];
         if (!file) return;
 
-        // Clear both canvas and selection area before loading new JSON
-        resetCanvas();
-        clearSelectionArea();
+        // Clear the selection area and canvas for new JSON data
+        resetAll();
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -21,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const glyphs = JSON.parse(e.target.result);
                 console.log("Parsed glyphs data from uploaded JSON:", glyphs);
 
-                // Render new glyphs after canvas reset
+                // Render new glyphs
                 renderGlyphs(glyphs);
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
@@ -31,22 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.readAsText(file);
     }
 
-    // Function to reset the canvas
-    function resetCanvas() {
-        canvas.innerHTML = ""; // Clear all existing canvas tiles
-        for (let i = 0; i < 16 * 32; i++) {
-            const tile = document.createElement("div");
-            tile.classList.add("canvas-tile");
-            tile.addEventListener("dragover", dragOver);
-            tile.addEventListener("drop", drop);
-            canvas.appendChild(tile);
-        }
-        console.log("Canvas reset and reinitialized.");
-    }
+    // Function to reset both the canvas and selection area
+    function resetAll() {
+        // Clear canvas
+        canvas.innerHTML = "";
+        console.log("Canvas cleared.");
 
-    // Function to clear the selection area
-    function clearSelectionArea() {
-        glyphSelection.innerHTML = ""; // Clear any existing glyphs in the selection area
+        // Clear selection area
+        glyphSelection.innerHTML = "";
         console.log("Selection area cleared.");
     }
 
