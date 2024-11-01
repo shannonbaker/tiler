@@ -27,6 +27,7 @@
     {
         "type": "text",
         "content": "ALT",
-        "size": 36
+        "size": 36,
+        "spanWidth": 2
     }
 ]
