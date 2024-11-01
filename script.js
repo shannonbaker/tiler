@@ -4,18 +4,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const jsonUpload = document.getElementById("jsonUpload");
     const resetButton = document.getElementById("resetButton");
 
-    // Event listener for the reset button
     resetButton.addEventListener("click", resetAll);
-
-    // Event listener for file upload
     jsonUpload.addEventListener("change", handleFileUpload);
 
-    // Function to handle file upload
     function handleFileUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
 
-        resetAll(); // Clear canvas and selection area
+        resetAll();
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -23,10 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const glyphs = JSON.parse(e.target.result);
                 console.log("Parsed glyphs data from uploaded JSON:", glyphs);
 
-                // Render new glyphs
                 renderGlyphs(glyphs);
 
-                // Clear the file input to allow re-selection of the same file
                 jsonUpload.value = '';
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
@@ -36,9 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.readAsText(file);
     }
 
-    // Function to reset both the canvas and selection area
     function resetAll() {
-        // Clear and reinitialize canvas tiles
         canvas.innerHTML = "";
         for (let i = 0; i < 16 * 32; i++) {
             const tile = document.createElement("div");
@@ -49,12 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         console.log("Canvas reset.");
 
-        // Clear glyph selection area
         glyphSelection.innerHTML = "";
         console.log("Selection area cleared.");
     }
 
-    // Render glyphs from JSON data
     function renderGlyphs(glyphs) {
         glyphs.forEach(glyph => {
             const glyphElement = document.createElement("div");
@@ -62,30 +52,51 @@ document.addEventListener("DOMContentLoaded", () => {
             glyphElement.draggable = true;
             glyphElement.classList.add("glyph");
 
-            // Apply specific classes and styles based on glyph type
             if (glyph.type === "icon") {
                 glyphElement.classList.add("icon-glyph", "material-symbols-outlined");
             } else if (glyph.type === "text") {
                 glyphElement.classList.add("text-glyph");
             }
 
-            // Set font size based on the size property, defaulting to 48 if undefined
             const fontSize = glyph.size || 48;
             glyphElement.style.fontSize = `${fontSize}px`;
 
-            // Set data attributes for span and offset information
             glyphElement.dataset.spanWidth = glyph.spanWidth || 1;
             glyphElement.dataset.offsetX = glyph.offset?.x || 0;
             glyphElement.dataset.offsetY = glyph.offset?.y || 0;
 
-            // Add dragstart event listener to make the glyph draggable
             glyphElement.addEventListener("dragstart", dragStart);
-            glyphSelection.appendChild(glyphElement); // Add glyph to selection area
+            glyphSelection.appendChild(glyphElement);
+
+            if (glyph.glyphNumber !== undefined) {
+                placeGlyphOnCanvas(glyph, glyph.glyphNumber);
+            }
         });
         console.log("Glyphs rendered from uploaded JSON.");
     }
 
-    // Drag-and-drop handlers
+    function placeGlyphOnCanvas(glyph, tileIndex) {
+        const targetTile = canvas.children[tileIndex];
+        if (targetTile && targetTile.classList.contains("canvas-tile")) {
+            targetTile.textContent = glyph.content;
+            targetTile.style.fontFamily = glyph.type === "icon" ? "Material Symbols Outlined" : "Bruno Ace SC";
+            targetTile.style.fontSize = `${glyph.size || 48}px`;
+            targetTile.classList.add("material-symbols-outlined");
+            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
+            targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
+            targetTile.style.overflow = "hidden";
+            targetTile.style.position = "relative";
+            targetTile.style.left = `${glyph.offset?.x || 0}px`;
+            targetTile.style.top = `${glyph.offset?.y || 0}px`;
+
+            targetTile.style.color = "white";
+            const contentWidth = targetTile.scrollWidth;
+            const availableWidth = 72 * (glyph.spanWidth || 1) - Math.abs(glyph.offset?.x || 0);
+            const isClipped = contentWidth > availableWidth;
+            targetTile.style.color = isClipped ? "red" : "white";
+        }
+    }
+
     function dragStart(event) {
         const isIconGlyph = event.target.classList.contains("icon-glyph");
         event.dataTransfer.setData("text/plain", event.target.textContent);
@@ -104,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function dragOver(event) {
-        event.preventDefault(); // Necessary for allowing drops
+        event.preventDefault();
     }
 
     function drop(event) {
@@ -122,15 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
-            targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
+            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * spanWidth}px`;
             targetTile.style.overflow = "hidden";
-
             targetTile.style.position = "relative";
             targetTile.style.left = `${offsetX}px`;
             targetTile.style.top = `${offsetY}px`;
 
-            // Clipping logic
             targetTile.style.color = "white";
             const contentWidth = targetTile.scrollWidth;
             const availableWidth = 72 * spanWidth - Math.abs(offsetX);
