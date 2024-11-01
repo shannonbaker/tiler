@@ -38,7 +38,8 @@ body {
     gap: 0;
     border: 1px solid #ccc;
     position: relative;
-    background-color: #f0f0f0;
+    background-color: transparent;
+    /* Transparent canvas background */
 }
 
 .canvas-tile {
@@ -54,6 +55,8 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-align: center;
+    background-color: transparent;
+    /* Transparent tile background */
 }
 
 .upload-section {

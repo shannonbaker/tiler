@@ -5,11 +5,11 @@ function exportCanvasAsPNG() {
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
                 link.download = "canvas.png";
-                document.body.appendChild(link); // Append link for Firefox compatibility
+                document.body.appendChild(link); // Needed for Firefox compatibility
                 link.click();
                 document.body.removeChild(link); // Clean up
                 URL.revokeObjectURL(link.href);
-                console.log("PNG file should be saved as 'canvas.png'.");
+                console.log("PNG file saved with a transparent background as 'canvas.png'.");
             } else {
                 console.error("Failed to create PNG blob.");
             }
@@ -141,9 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const symbol = event.dataTransfer.getData("text/plain");
         const fontFamily = event.dataTransfer.getData("font-family");
         const fontSize = parseInt(event.dataTransfer.getData("font-size"), 10);
-        const spanWidth = parseInt(event.dataTransfer.getData("span-width"), 10);
-        const offsetX = parseInt(event.dataTransfer.getData("offset-x"), 10);
-        const offsetY = parseInt(event.dataTransfer.getData("offset-y"), 10);
+        const spanWidth = parseInt(event.dataTransfer.getData("spanWidth"), 10);
+        const offsetX = parseInt(event.dataTransfer.getData("offsetX"), 10);
+        const offsetY = parseInt(event.dataTransfer.getData("offsetY"), 10);
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
