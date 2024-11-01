@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 renderGlyphs(glyphs);
 
-                jsonUpload.value = '';
+                jsonUpload.value = ''; // Clear the file input to allow re-selection of the same file
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
                 alert("Invalid JSON file. Please check the structure and try again.");
@@ -82,7 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontFamily = glyph.type === "icon" ? "Material Symbols Outlined" : "Bruno Ace SC";
             targetTile.style.fontSize = `${glyph.size || 48}px`;
             targetTile.classList.add("material-symbols-outlined");
-            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
+
+            // Updated text-shadow with 2px blur radius
+            targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * (glyph.spanWidth || 1)}px`;
             targetTile.style.overflow = "hidden";
             targetTile.style.position = "relative";
@@ -115,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function dragOver(event) {
-        event.preventDefault();
+        event.preventDefault(); // Necessary for allowing drops
     }
 
     function drop(event) {
@@ -133,7 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
-            targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
+
+            // Updated text-shadow with 2px blur radius
+            targetTile.style.textShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)";
             targetTile.style.width = `${72 * spanWidth}px`;
             targetTile.style.overflow = "hidden";
             targetTile.style.position = "relative";
