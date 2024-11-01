@@ -16,13 +16,31 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const glyphs = JSON.parse(e.target.result);
                 console.log("Uploaded glyphs data:", glyphs);
-                renderGlyphs(glyphs); // Render new glyphs
+
+                // Reset the canvas
+                resetCanvas();
+
+                // Render new glyphs
+                renderGlyphs(glyphs);
             } catch (error) {
                 console.error("Error parsing JSON file:", error);
                 alert("Invalid JSON file. Please check the structure and try again.");
             }
         };
         reader.readAsText(file);
+    }
+
+    // Function to reset the canvas
+    function resetCanvas() {
+        canvas.innerHTML = ""; // Clear existing canvas tiles
+        for (let i = 0; i < 16 * 32; i++) {
+            const tile = document.createElement("div");
+            tile.classList.add("canvas-tile");
+            tile.addEventListener("dragover", dragOver);
+            tile.addEventListener("drop", drop);
+            canvas.appendChild(tile);
+        }
+        console.log("Canvas reset and reinitialized.");
     }
 
     // Render glyphs from JSON data
@@ -58,15 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Glyphs rendered from uploaded JSON."); // Confirm rendering
     }
 
-    // Create grid tiles on canvas with necessary event listeners
-    for (let i = 0; i < 16 * 32; i++) {
-        const tile = document.createElement("div");
-        tile.classList.add("canvas-tile");
-        tile.addEventListener("dragover", dragOver);
-        tile.addEventListener("drop", drop);
-        canvas.appendChild(tile);
-    }
-
     // Drag-and-drop handlers remain the same
     function dragStart(event) {
         const isIconGlyph = event.target.classList.contains("icon-glyph");
@@ -100,35 +109,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const targetTile = event.target;
 
         if (targetTile.classList.contains("canvas-tile")) {
-            // Apply the glyph to the starting tile
             targetTile.textContent = symbol;
             targetTile.style.fontFamily = fontFamily;
             targetTile.style.fontSize = `${fontSize}px`;
             targetTile.classList.add("material-symbols-outlined");
             targetTile.style.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
-            targetTile.style.width = `${72 * spanWidth}px`; // Set the width to span multiple tiles if needed
+            targetTile.style.width = `${72 * spanWidth}px`;
             targetTile.style.overflow = "hidden";
 
-            // Position adjustment using offset
             targetTile.style.position = "relative";
             targetTile.style.left = `${offsetX}px`;
             targetTile.style.top = `${offsetY}px`;
 
-            // Temporarily set color to white for measurement
+            // Clipping logic
             targetTile.style.color = "white";
-
-            // Measure the actual rendered width of the content
             const contentWidth = targetTile.scrollWidth;
-
-            // Check if the rendered width exceeds the available width for the span
-            const availableWidth = 72 * spanWidth;
+            const availableWidth = 72 * spanWidth - Math.abs(offsetX);
             const isClipped = contentWidth > availableWidth;
-
-            // Set color to red if clipped, otherwise keep it white
             targetTile.style.color = isClipped ? "red" : "white";
-
-            console.log("Dropped:", symbol, "Size:", fontSize, "Span Width:", spanWidth, "Clipped:", isClipped); // Log drop with span width and clipping status
         }
     }
-
 });
